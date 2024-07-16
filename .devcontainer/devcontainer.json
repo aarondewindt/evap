@@ -1,0 +1,72 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/postgres
+{
+	"name": "Evap Dev",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		// "ghcr.io/devcontainers/features/node:1": {
+		// 	"nodeGypDependencies": true,
+		// 	"version": "18",
+		// 	"nvmVersion": "latest"
+		// },
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"dockerDashComposeVersion": "none"
+		},
+		// "ghcr.io/devcontainers/features/azure-cli:1": {},
+		// "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// This can be used to network with other containers or the host.
+	"forwardPorts": [
+		3000, 6006, 9000, 9001, 8080, 5432
+	],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "bash .devcontainer/post_create.sh",
+
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": { 
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/bin/zsh"
+					}
+				},
+				"editor.tabSize": 2,
+				"editor.insertSpaces": true
+			},
+			
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"tamasfe.even-better-toml",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"eamodio.gitlens",
+				"ecmel.vscode-html-css",
+				"Zignd.html-css-class-completion",
+				"ms-vscode.vscode-typescript-next",
+				"ms-vscode.js-debug-nightly",
+				"DavidAnson.vscode-markdownlint",
+				"unifiedjs.vscode-mdx",
+				"corker.vscode-micromamba",
+				"mohsen1.prettify-json",
+				"marclipovsky.string-manipulation",
+				"adamhartford.vscode-base64",
+				"redhat.vscode-xml",
+				"DotJoshJohnson.xml",
+				"Prisma.prisma"
+			]
+		}
+	}
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

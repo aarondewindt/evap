@@ -1,0 +1,23 @@
+.katex-html {
+  display: none
+}
+
+input[type=checkbox] {
+  cursor: pointer
+}
+
+/* .mantine-ThemeIcon-root .tabler-icon, */
+.mantine-ActionIcon-root .tabler-icon {
+  width: 70%;
+  height: 70%;
+}
+
+dl {
+  margin-block-start: 0em;
+}
+
+dt {
+  font-weight: bold;
+}
+
+
