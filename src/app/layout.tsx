@@ -9,8 +9,8 @@ import { ClientLayout } from './client_layout';
 import { theme } from '@/theme';
 
 export const metadata = {
-  title: 'My Mantine app',
-  description: 'I have followed setup instructions carefully',
+  title: 'Event planner',
+  description: "Aaron's event planner",
 };
 
 export default function RootLayout({

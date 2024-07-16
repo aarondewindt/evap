@@ -5,7 +5,7 @@ import { Permission } from "./types"
 import { check_permission } from "./check_permission"
 import { useGlobalStateContext } from "@/app/global_state"
 
-export const useSessionQuery = <T extends Record<string, Permission[]>>(permissions?: Permission[], extra_permissions?: T ) => {
+export const useSessionQuery = () => {
   return useQuery({
       queryKey: ["session"], 
       queryFn: async () => {
