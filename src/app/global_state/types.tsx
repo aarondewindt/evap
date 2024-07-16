@@ -2,7 +2,6 @@ import { useSessionQuery } from '@/server_actions/session/hooks'
 import type { ReactNode } from 'react'
 
 export const local_storage_key = "evap_state"
-export const url_key = "g"
 
 export type Memory = { 
   is_nav_open: boolean
@@ -12,20 +11,9 @@ export type LocalStorage = {
 
 }
 
-export type URLStorage = {
-
-}
-
-export type Queries = {
-  session: ReturnType<typeof useSessionQuery>
-}
-
-export type Mutations = {
-  
-}
-
-export type Other = {
+export type Injected = {
   is_mobile_screen?: boolean
+  session?: ReturnType<typeof useSessionQuery>
 }
 
 export interface GlobalStateProviderProps {
@@ -35,10 +23,7 @@ export interface GlobalStateProviderProps {
 export interface State {
   memory: Memory
   local_storage: LocalStorage
-  url: URLStorage
-  queries: Queries
-  mutations: Mutations
-  other: Other
+  injected: Injected
 }
 
 export const init_memory: Memory = { 
@@ -47,4 +32,3 @@ export const init_memory: Memory = {
 
 export const init_local_storage: LocalStorage = { }
 
-export const init_url: URLStorage = {}

@@ -20,7 +20,7 @@ export default function Home() {
   return <Paper>
     <Text c="grape">Home</Text>
     <Text c="grape">
-      {gctx.state.other.is_mobile_screen ? "mobile" : "desktop"}
+      {gctx.state.injected.is_mobile_screen ? "mobile" : "desktop"}
     </Text>
 
     <Text ff="monospace">

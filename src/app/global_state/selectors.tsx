@@ -9,10 +9,10 @@ export const useSelectors = ()=> {
   return useMemo(() => {
     
     const sel_is_nav_open = (state: State) => state.memory.is_nav_open
-    const sel_is_mobile_screen = (state: State) => state.other.is_mobile_screen
+    const sel_is_mobile_screen = (state: State) => state.injected.is_mobile_screen
 
-    const sel_session_query = (state: State) => state.queries.session
-    const sel_session = createSelector(sel_session_query, (query) => query.data ?? null)
+    const sel_session_query = (state: State) => state.injected.session
+    const sel_session = createSelector(sel_session_query, (query) => query?.data ?? null)
 
     return {
       sel_is_nav_open,
