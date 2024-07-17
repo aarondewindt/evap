@@ -2,8 +2,13 @@ import { useGetVolunteersById } from '@/server_actions/volunteers/hooks'
 import { Prisma } from '@/db'
 import type { ReactNode } from 'react'
 import { View, Event as RbcEvent } from 'react-big-calendar'
+import { BigCalendarEvent } from '../big_calendar'
 
 export type VolunteerInfo = Prisma.VolunteerGetPayload<{ include: { availability_slots: true }}>
+
+export type CalendarEvent = BigCalendarEvent & {
+  resource: Prisma.VolunteerAvailabilitySlotGetPayload<{}>
+}
 
 export type VolunteerViewProps = { 
   volunteer_id: string

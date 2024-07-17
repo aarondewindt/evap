@@ -9,7 +9,6 @@ export const useSelectors = <TEvent extends object, TResource extends object>() 
   return useMemo(() => {
     
     const sel_expand_height = (state: State<TEvent, TResource>) => state.props.expand_height
-    const sel_props_calender_props = (state: State<TEvent, TResource>) => state.props.calendar_props
     const sel_current_date = (state: State<TEvent, TResource>) => state.memory.date
     const sel_current_view = (state: State<TEvent, TResource>) => state.memory.view
 

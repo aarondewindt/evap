@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Stack, Text, TextInput, Title } from "@mantine/core"
-import type { VolunteerViewProps } from "./types"
+import type { CalendarEvent, VolunteerViewProps } from "./types"
 import { VolunteerViewProvider, useVolunteerViewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { IconCancel, IconDeviceFloppy, IconEdit } from "@tabler/icons-react"
@@ -10,6 +10,7 @@ import { Calendar, Views } from "react-big-calendar"
 import { localizer, DnDCalendar } from "@/calendar_localizer"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { ExpandHeight } from "@/utils/expand_height"
+import { BigCalendar } from "../big_calendar"
 
 
 
@@ -38,47 +39,31 @@ const VolunteerViewInner = ({}: {}) => {
     />
     <Stack p="sm">
       <TextInput 
-      
+
         label="Name" 
         onChange={(e: ChangeEvent<HTMLInputElement>) => { ctx.on_name_change(e.target.value)}}
         {...ctx.name_input_props}
       />
       
-      <AvailabilityCalendar/>       
+      {/* <AvailabilityCalendar/>     */}
+
+      <BigCalendar<CalendarEvent> 
+        expand_height
+        
+        calendar_props={{
+          popup: true,
+          draggableAccessor: (event) => true,
+          onSelectEvent: ctx.on_calender_select_event,
+          onSelectSlot: ctx.on_calender_select_slot,
+          onDoubleClickEvent: ctx.on_calendar_double_click,
+          onEventDrop: ctx.on_calendar_event_edit,
+          onEventResize: ctx.on_calendar_event_edit,
+
+          ...ctx.calender_props
+        }}     
+      />
+
     </Stack>
   </>
   
-}
-
-
-const AvailabilityCalendar = ({}: {}) => {
-  const ctx = useVolunteerViewContext()
-
-  return <Stack p={0}>
-    <Title order={3}>Availability</Title>
-    <ExpandHeight>
-      {/* @ts-ignore */} 
-      <DnDCalendar
-        localizer={localizer}
-        defaultView="week"
-        dayLayoutAlgorithm="no-overlap"
-        step={15}
-
-        onNavigate={ctx.on_calendar_navidate}
-        onView={ctx.on_calendar_view_change}
-        onSelectEvent={ctx.on_calender_select_event}
-        onSelectSlot={ctx.on_calender_select_slot}
-        onDoubleClickEvent={ctx.on_calendar_double_click}
-        onEventDrop={ctx.on_calendar_event_edit}
-        onEventResize={ctx.on_calendar_event_edit}
-
-        draggableAccessor={(event) => ctx.is_editing}
-        popup
-        resizable={ctx.is_editing}
-
-        {...ctx.calender_props}
-        
-      />
-    </ExpandHeight>
-  </Stack>
 }

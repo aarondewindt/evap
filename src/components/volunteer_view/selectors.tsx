@@ -2,7 +2,7 @@ import _ from "lodash"
 import { useMemo } from "react"
 import { createSelector } from 'reselect'
 
-import type { State, VolunteerInfo } from "./types"
+import type { CalendarEvent, State, VolunteerInfo } from "./types"
 import { Prisma } from "@prisma/client"
 import { CalendarProps, Event as RbcEvent } from "react-big-calendar"
 import dayjs from "@/dates"
@@ -76,7 +76,7 @@ export const useSelectors = ()=> {
 
     const sel_availability_slots_calendar_events = createSelector(
       sel_availability_slots,
-      (availability_slots): RbcEvent[] => {
+      (availability_slots): CalendarEvent[] => {
         return availability_slots.map((slot) => ({
           title: "Available",
           start: slot.start_datetime,
@@ -91,7 +91,7 @@ export const useSelectors = ()=> {
       (state: State) => state.memory.selected_slot_id,
       sel_is_editing,
       sel_availability_slots_calendar_events,
-      (date, view, selected_slot_id, is_editing, slots): Partial<CalendarProps> => {
+      (date, view, selected_slot_id, is_editing, slots) => {
         const selected = selected_slot_id ? slots.find((slot) => slot.resource.id === selected_slot_id) : null
         return {
           date,
