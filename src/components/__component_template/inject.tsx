@@ -4,9 +4,9 @@ import { Selectors } from "./selectors"
 
 
 export const useInject = (state: State, s: Selectors) => {
-  const state_1 = useInjectValue(state, "queries", "q1", 
-    "" // useQuery(...)
-  )
+  const state_1 = useInjectValues(state, "injected", {
+    bar: "bar",
+  })
 
   return {
     state: state_1,

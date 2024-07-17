@@ -1,11 +1,12 @@
 "use client"
 
-import { Box } from "@mantine/core"
+import { Box, Stack } from "@mantine/core"
 import type { EventsOverviewProps } from "./types"
 import { EventsOverviewProvider, useEventsOverviewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { DnDCalendar, localizer } from "@/calendar_localizer"
+import { ExpandHeight } from "@/utils/expand_height"
 
 
 export const EventsOverview = (props: EventsOverviewProps) => {
@@ -28,12 +29,13 @@ const EventsOverviewInner = ({}: {}) => {
       />}
     />
     
-    <Box style={{height: 600}}>
+    <ExpandHeight>
       {/* @ts-ignore */}
       <DnDCalendar
         localizer={localizer}
         dayLayoutAlgorithm="no-overlap"
         step={15}
+        timeslots={4}
 
         onNavigate={ctx.on_calendar_navigate}
         onView={ctx.on_calendar_view_change}
@@ -50,7 +52,7 @@ const EventsOverviewInner = ({}: {}) => {
         {...ctx.calender_props}
         
       />
-    </Box>
+    </ExpandHeight>
 
   </>
 }

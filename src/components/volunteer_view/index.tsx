@@ -9,6 +9,7 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from "react"
 import { Calendar, Views } from "react-big-calendar"
 import { localizer, DnDCalendar } from "@/calendar_localizer"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
+import { ExpandHeight } from "@/utils/expand_height"
 
 
 
@@ -37,11 +38,13 @@ const VolunteerViewInner = ({}: {}) => {
     />
     <Stack p="sm">
       <TextInput 
+      
         label="Name" 
         onChange={(e: ChangeEvent<HTMLInputElement>) => { ctx.on_name_change(e.target.value)}}
         {...ctx.name_input_props}
-      />     
-      <AvailabilityCalendar/> 
+      />
+      
+      <AvailabilityCalendar/>       
     </Stack>
   </>
   
@@ -51,9 +54,9 @@ const VolunteerViewInner = ({}: {}) => {
 const AvailabilityCalendar = ({}: {}) => {
   const ctx = useVolunteerViewContext()
 
-  return <Stack>
+  return <Stack p={0}>
     <Title order={3}>Availability</Title>
-    <Box style={{height: 600}}>
+    <ExpandHeight>
       {/* @ts-ignore */} 
       <DnDCalendar
         localizer={localizer}
@@ -76,6 +79,6 @@ const AvailabilityCalendar = ({}: {}) => {
         {...ctx.calender_props}
         
       />
-    </Box>
+    </ExpandHeight>
   </Stack>
 }
