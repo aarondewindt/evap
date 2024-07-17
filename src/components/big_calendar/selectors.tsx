@@ -8,16 +8,27 @@ import type { State } from "./types"
 export const useSelectors = <TEvent extends object, TResource extends object>() => {
   return useMemo(() => {
     
-    const sel_example = (state: State<TEvent, TResource>): number => { 
-      return 23423
-    }
+    const sel_expand_height = (state: State<TEvent, TResource>) => state.props.expand_height
+    const sel_props_calender_props = (state: State<TEvent, TResource>) => state.props.calendar_props
+    const sel_current_date = (state: State<TEvent, TResource>) => state.memory.date
+    const sel_current_view = (state: State<TEvent, TResource>) => state.memory.view
 
-    const sel_example2 = (state: State<TEvent, TResource>): number => 4234
+    const sel_calender_props = createSelector(
+      sel_current_date,
+      sel_current_view,
+      sel_props_calender_props,
+      (current_date, current_view, props) => {
+        return {
+          date: current_date,
+          view: current_view,
+          ...props,
+        }
+      }
+    )
 
     return {
-      sel_example,
-      sel_example2,
-
+      sel_expand_height,
+      sel_calender_props
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

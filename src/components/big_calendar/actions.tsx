@@ -3,6 +3,7 @@ import { useSelectors } from "./selectors"
 import { State } from "./types"
 import { Draft } from "immer"
 import { useInject } from "./inject"
+import { View } from "react-big-calendar"
 
 
 export const useActions = <TEvent extends object, TResource extends object>(
@@ -11,13 +12,20 @@ export const useActions = <TEvent extends object, TResource extends object>(
       a: ReturnType<typeof useInject<TEvent, TResource>>['injected_actions'],
       set_state: (recipe: (draft: Draft<State<TEvent, TResource>>)=>void)=>void) => {
   
-  const on_something = useCallback(() => {
+  const on_calendar_navigate = useCallback((date: Date) => {
     set_state((draft) => {
-      draft.memory.foo = 1
+      draft.memory.date = date
     })
-  }, [set_state])
+  }, [ set_state ])
+
+  const on_calendar_view_change = useCallback((view: View) => {
+    set_state((draft) => {
+      draft.memory.view = view
+    })
+  }, [ set_state ])
 
   return {
-    on_something
+    on_calendar_navigate,
+    on_calendar_view_change,
   }
 }
