@@ -53,13 +53,14 @@ export const useSelectors = ()=> {
       sel_calendar_events,
       sel_calendar_settings,
       sel_selected_event_id,
-      (is_editing, events, settings, selected_event_id): Partial<CalendarProps> => {
+      (is_editing, events, settings, selected_event_id) => {
         const selected = events.find((e) => e.id === selected_event_id)
         return {
           events,
           view: settings.view,
           date: settings.date,
           selectable: is_editing,
+          resizable: is_editing,
           selected
       }}
     )

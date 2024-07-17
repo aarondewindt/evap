@@ -11,7 +11,7 @@ export type CalendarState = {
 
 export type BigCalendarProps<TEvent extends object, TResource extends object> = {
   expand_height: boolean
-  calendar_props?: withDragAndDropProps<TEvent, TResource> & CalendarProps<TEvent, TResource>
+  calendar_props?: Omit<withDragAndDropProps<TEvent, TResource> & CalendarProps<TEvent, TResource>, "localizer">
 }
 
 export type Memory<TEvent extends object, TResource extends object> = { 

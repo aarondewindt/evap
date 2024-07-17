@@ -2,7 +2,12 @@ import { useGetAllEvents } from '@/server_actions/events/hooks'
 import { Prisma } from '@prisma/client'
 import type { ReactNode } from 'react'
 import { View } from 'react-big-calendar'
+import { BigCalendarEvent } from '../big_calendar'
 
+
+export type CalendarEvent = BigCalendarEvent & {
+  resource: Prisma.EventGetPayload<{}>
+}
 
 export type EventCalendarSettings = {
   view: View

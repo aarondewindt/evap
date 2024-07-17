@@ -3,7 +3,7 @@ import { } from "@mantine/core"
 import type { BigCalendarProps } from "./types"
 import { useBigCalendarContext } from "./context"
 import { ExpandHeight } from "@/utils/expand_height"
-import { Component, ComponentType, Fragment } from "react"
+import { Fragment } from "react"
 import { Calendar, dayjsLocalizer } from 'react-big-calendar'
 import dayjs from '@/dates'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
@@ -16,17 +16,32 @@ import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 export const localizer = dayjsLocalizer(dayjs)
 
 
-export const createBigCalendar = <TEvent extends object = Event, TResource extends object = object>() => {
-  const DnDCalendar = withDragAndDrop(Calendar<TEvent, TResource>)
+export type BigCalendarEvent = {
+  allDay?: boolean | undefined;
+  title?: React.ReactNode | undefined;
+  start?: Date | undefined;
+  end?: Date | undefined;
+  resource: object;
+}
 
-  return (props: BigCalendarProps<TEvent, TResource>) => {
+const DnDCalendar = withDragAndDrop(Calendar)
+
+export const createBigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>
+                                 () => {  
+  const TypedDnDCalendar = DnDCalendar as unknown as ReturnType<typeof withDragAndDrop<TEvent, TEvent['resource']>>
+
+  return (props: BigCalendarProps<TEvent, TEvent['resource']>) => {
     // This is not a react context. This instance must be passed to all child components
+    const calendar_props = props.calendar_props ?? {}
+
     const ctx = useBigCalendarContext(props)
 
     const expand_height_wrapper = ctx.expand_height ? ExpandHeight : Fragment
 
+    console.log("BigCalendar", { calendar_props, ctx })
+
     return expand_height_wrapper({ children: 
-      <DnDCalendar
+      <TypedDnDCalendar
         localizer={localizer}
         // dayLayoutAlgorithm="no-overlap"
         step={15}
@@ -35,20 +50,40 @@ export const createBigCalendar = <TEvent extends object = Event, TResource exten
 
         onNavigate={ctx.on_calendar_navigate}
         onView={ctx.on_calendar_view_change}
-        // onSelectEvent={ctx.on_calender_select_event}
-        // onSelectSlot={ctx.on_calender_select_slot}
-        // onDoubleClickEvent={ctx.on_calendar_double_click}
-        // onEventDrop={ctx.on_calendar_event_edit}
-        // onEventResize={ctx.on_calendar_event_edit}
 
-        // draggableAccessor={(event) => ctx.is_editing}
-        
-        // resizable={ctx.is_editing}
+        draggableAccessor={(event) => true}
 
+        {...calendar_props}
         {...ctx.calender_props}
         
       />})
   }
 }
 
+
+export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(props: BigCalendarProps<TEvent, TEvent['resource']>) => {
+  const TypedDnDCalendar = DnDCalendar as unknown as ReturnType<typeof withDragAndDrop<TEvent, TEvent['resource']>>
+  const ctx = useBigCalendarContext(props)
+  const calendar_props = props.calendar_props ?? {}
+  const expand_height_wrapper = ctx.expand_height ? ExpandHeight : Fragment
+
+  // console.log("BigCalendar", { calendar_props, ctx })
+
+  return expand_height_wrapper({ children:
+    <TypedDnDCalendar
+      localizer={localizer}
+      // dayLayoutAlgorithm="no-overlap"
+      step={15}
+      timeslots={8}
+      popup
+
+      onNavigate={ctx.on_calendar_navigate}
+      onView={ctx.on_calendar_view_change}
+
+      {...calendar_props}
+      {...ctx.calender_props}
+    />
+  })
+  
+}
 

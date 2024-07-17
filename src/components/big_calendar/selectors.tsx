@@ -16,12 +16,10 @@ export const useSelectors = <TEvent extends object, TResource extends object>() 
     const sel_calender_props = createSelector(
       sel_current_date,
       sel_current_view,
-      sel_props_calender_props,
-      (current_date, current_view, props) => {
+      (current_date, current_view) => {
         return {
           date: current_date,
-          view: current_view,
-          ...props,
+          view: current_view
         }
       }
     )

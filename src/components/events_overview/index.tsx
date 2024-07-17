@@ -1,12 +1,14 @@
 "use client"
 
 import { Box, Stack } from "@mantine/core"
-import type { EventsOverviewProps } from "./types"
+import type { CalendarEvent, EventsOverviewProps } from "./types"
 import { EventsOverviewProvider, useEventsOverviewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { DnDCalendar, localizer } from "@/calendar_localizer"
 import { ExpandHeight } from "@/utils/expand_height"
+import { BigCalendar, createBigCalendar } from "../big_calendar"
+import { Prisma } from "@/db"
 
 
 export const EventsOverview = (props: EventsOverviewProps) => {
@@ -14,6 +16,7 @@ export const EventsOverview = (props: EventsOverviewProps) => {
     <EventsOverviewInner/>
   </EventsOverviewProvider>
 }
+
 
 const EventsOverviewInner = ({}: {}) => {
   const ctx = useEventsOverviewContext()
@@ -29,30 +32,22 @@ const EventsOverviewInner = ({}: {}) => {
       />}
     />
     
-    <ExpandHeight>
-      {/* @ts-ignore */}
-      <DnDCalendar
-        localizer={localizer}
-        dayLayoutAlgorithm="no-overlap"
-        step={15}
-        timeslots={4}
+    <BigCalendar<CalendarEvent> 
+      expand_height
+      
+      calendar_props={{
+        popup: true,
+        draggableAccessor: (event) => true,
+        onSelectEvent: ctx.on_calender_select_event,
+        onSelectSlot: ctx.on_calender_select_slot,
+        onDoubleClickEvent: ctx.on_calendar_double_click,
+        onEventDrop: ctx.on_calendar_event_edit,
+        onEventResize: ctx.on_calendar_event_edit,
 
-        onNavigate={ctx.on_calendar_navigate}
-        onView={ctx.on_calendar_view_change}
-        onSelectEvent={ctx.on_calender_select_event}
-        onSelectSlot={ctx.on_calender_select_slot}
-        onDoubleClickEvent={ctx.on_calendar_double_click}
-        onEventDrop={ctx.on_calendar_event_edit}
-        onEventResize={ctx.on_calendar_event_edit}
+        ...ctx.calender_props
+      }}
+      
 
-        draggableAccessor={(event) => ctx.is_editing}
-        popup
-        resizable={ctx.is_editing}
-
-        {...ctx.calender_props}
-        
-      />
-    </ExpandHeight>
-
+       />
   </>
 }
