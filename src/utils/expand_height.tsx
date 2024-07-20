@@ -16,7 +16,7 @@ export const ExpandHeight = ({ children }: ExpandHeightProps) => {
     return view_port_height - element_offset;
   }, [ view_port_height ]);
 
-  return <div ref={ref} style={{ height: element_height }}>
+  return <div ref={ref} style={{ minHeight: element_height, display: "flex", flexDirection: "column" }}>
     {children}
   </div>
 }

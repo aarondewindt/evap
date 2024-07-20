@@ -1,10 +1,8 @@
 import { useContext, createContext, useCallback, useState, useMemo } from 'react'
-import { useLocalStorage } from '@mantine/hooks';
 import {produce, Draft} from "immer"
 
 import { init_memory, State, VolunteerListProviderProps } from "./types"
 import { useSelectors, SelectedValues } from "./selectors"
-import { useURLState } from '@/utils/use_url_state';
 import { useActions } from './actions';
 import { useInject } from './inject';
 
@@ -23,7 +21,7 @@ export const VolunteerListProvider = ({ children, ...props }: VolunteerListProvi
 
   const { state, injected_actions } = useInject(
     useMemo(() => ({
-      props, memory, server_actions: {}
+      props, memory, injected: {}
     }), [props, memory ]), 
     selectors
   )

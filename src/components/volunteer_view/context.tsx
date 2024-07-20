@@ -4,7 +4,6 @@ import {produce, Draft} from "immer"
 
 import { init_memory, State, VolunteerViewProviderProps } from "./types"
 import { useSelectors, SelectedValues } from "./selectors"
-import { useURLState } from '@/utils/use_url_state';
 import { useActions } from './actions';
 import { useInject } from './inject';
 
@@ -23,8 +22,8 @@ export const VolunteerViewProvider = ({ children, ...props }: VolunteerViewProvi
 
   const { state, injected_actions } = useInject(
     useMemo(() => ({
-      props, memory, other: {}
-    }), [props, memory ]), 
+      props, memory, injected: {}
+    }), [ props, memory ]), 
     selectors
   )
 

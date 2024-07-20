@@ -1,4 +1,4 @@
-import { useGetVolunteersById } from '@/server_actions/volunteers/hooks'
+import { useCUDVolunteers, useFindVolunteers } from '@/server_actions/volunteers/hooks'
 import { Prisma } from '@/db'
 import type { ReactNode } from 'react'
 import { View, Event as RbcEvent } from 'react-big-calendar'
@@ -28,9 +28,9 @@ export type Memory = {
   selected_slot_id: string | null
 }
 
-export type Other = {
-  volunteers_query?: ReturnType<typeof useGetVolunteersById>
-  has_edit_permission?: boolean
+export type Injected = {
+  volunteers_query?: ReturnType<typeof useFindVolunteers>
+  cud_volunteers_mutation?: ReturnType<typeof useCUDVolunteers>
 }
 
 export interface VolunteerViewProviderProps extends VolunteerViewProps {
@@ -40,7 +40,7 @@ export interface VolunteerViewProviderProps extends VolunteerViewProps {
 export interface State {
   memory: Memory
   props: VolunteerViewProps
-  other: Other
+  injected: Injected
 }
 
 export const init_memory: Memory = { 

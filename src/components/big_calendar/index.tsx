@@ -36,6 +36,7 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
 
   return expand_height_wrapper({ children:
     <TypedDnDCalendar
+    style={{ flexGrow: 1, minHeight: 600 }}
       localizer={localizer}
       // dayLayoutAlgorithm="no-overlap"
       step={15}

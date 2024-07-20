@@ -4,7 +4,6 @@ import { State } from "./types"
 import { Draft } from "immer"
 import { useInject } from "./inject"
 import { View, Event as RbcEvent } from "react-big-calendar"
-import { Volunteer } from "@/server_actions/volunteers/action"
 
 
 export const useActions = (
@@ -13,10 +12,13 @@ export const useActions = (
       a: ReturnType<typeof useInject>['injected_actions'],
       set_state: (recipe: (draft: Draft<State>)=>void)=>void) => {
   
-  const { update_volunteers, delete_volunteers } = a
+  const { cud_volunteers } = a
 
-  const ref = useRef({ state, s, a, set_state })
-  useEffect(() => { ref.current = { state, s, a, set_state } }, [ state, s, a, set_state ])
+  const ref = useRef({ set_state })
+  useEffect(() => { ref.current = { set_state } }, [ set_state ])
+
+  // const ref = useRef({ state, s, a, set_state })
+  // useEffect(() => { ref.current = { state, s, a, set_state } }, [ state, s, a, set_state ])
 
   const on_enable_editing = useCallback(() => {
     set_state((draft) => {
@@ -37,7 +39,7 @@ export const useActions = (
     })
   }, [ set_state ])
 
-  const on_save = useCallback(() => {
+  const on_save = useCallback(async () => {
     const is_editing = s.sel_is_editing(state)
     if (!is_editing) return
 
@@ -45,17 +47,14 @@ export const useActions = (
     if (!volunteer) return
     
     const update_args = s.sel_on_save_args(state)
-
-    console.log("update_args", update_args)
-
     if (update_args) {
-      update_volunteers(update_args)
+      await cud_volunteers(update_args)
     }
 
-    set_state((draft) => {
+    ref.current.set_state((draft) => {
       draft.memory.edit = null
     })
-  }, [ set_state, s, update_volunteers, state ])
+  }, [ s, cud_volunteers, state ])
 
   const on_name_change = useCallback((value: string) => {
     set_state((draft) => {
@@ -65,6 +64,13 @@ export const useActions = (
     })
   }, [ set_state, s ])
 
+  const on_notes_change = useCallback((value: string) => {
+    set_state((draft) => {
+      const is_editing = s.sel_is_editing(draft)
+      if (!is_editing) return
+      draft.memory.edit!.volunteer.notes = value
+    })
+  }, [ set_state, s ])
 
   // Availabilty slots calendar
   const on_calendar_navidate = useCallback((date: Date) => {
@@ -139,6 +145,7 @@ export const useActions = (
     on_enable_editing,
     on_cancel_editing,
     on_name_change,
+    on_notes_change,
     on_save,
 
     on_calendar_navidate,

@@ -4,11 +4,15 @@ import { Prisma } from "@prisma/client"
 import { DefaultArgs } from "@prisma/client/runtime/library"
 
 
-export const useFindVolunteers = (args: VolunteerFindManyArgs) => {
+export type UseFindVolunteersOptions = {
+  find_many: VolunteerFindManyArgs
+}
+
+export const useFindVolunteers = (options: UseFindVolunteersOptions) => {
   return useQuery({
     queryKey: ["volunteers"],
     queryFn: async () => {
-      return await find_volunteers(args)
+      return await find_volunteers(options.find_many)
     }
   })
 }

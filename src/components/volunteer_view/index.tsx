@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Stack, Text, TextInput, Title } from "@mantine/core"
+import { Box, Paper, Stack, Text, TextInput, Title } from "@mantine/core"
 import type { CalendarEvent, VolunteerViewProps } from "./types"
 import { VolunteerViewProvider, useVolunteerViewContext } from "./context"
 import { Toolbar } from "../toolbar"
@@ -11,6 +11,7 @@ import { localizer, DnDCalendar } from "@/calendar_localizer"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { ExpandHeight } from "@/utils/expand_height"
 import { BigCalendar } from "../big_calendar"
+import { RichText } from "../rich_text"
 
 
 
@@ -37,7 +38,7 @@ const VolunteerViewInner = ({}: {}) => {
         onCancel={ctx.on_cancel_editing}
       />}
     />
-    <Stack p="sm">
+    <Stack p="sm" pb={0}>
       <TextInput 
 
         label="Name" 
@@ -45,7 +46,9 @@ const VolunteerViewInner = ({}: {}) => {
         {...ctx.name_input_props}
       />
       
-      {/* <AvailabilityCalendar/>     */}
+      <RichText value={ctx.notes} label="Notes" editor_enabled={ctx.is_editing} onChange={ctx.on_notes_change}/>
+
+
 
       <BigCalendar<CalendarEvent> 
         expand_height

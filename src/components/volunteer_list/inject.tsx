@@ -11,7 +11,7 @@ export const useInject = (state: State, s: Selectors) => {
   const cud_volunteers_mutation = useCUDVolunteers()
 
   const state_1 = useInjectValues(state, "injected", {
-    all_volunteers: useFindVolunteers({}),
+    all_volunteers: useFindVolunteers({find_many: {}}),
     cud_volunteers_mutation
   })
 

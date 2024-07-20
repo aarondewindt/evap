@@ -1,13 +1,10 @@
-import _ from "lodash"
+import _, { update } from "lodash"
 import { useMemo } from "react"
 import { createSelector } from 'reselect'
 
 import type { CalendarEvent, State, VolunteerInfo } from "./types"
-import { Prisma } from "@prisma/client"
-import { CalendarProps, Event as RbcEvent } from "react-big-calendar"
-import dayjs from "@/dates"
-import { stat } from "fs"
-import { VolunteerUpdateArgs } from "@/server_actions/volunteers/action"
+import { UseFindVolunteersOptions } from "@/server_actions/volunteers/hooks"
+import { CUDVolunteersArgs } from "@/server_actions/volunteers/actions"
 
 
 
@@ -17,18 +14,20 @@ export const useSelectors = ()=> {
   return useMemo(() => {
     
     const sel_volunteer_id = (state: State) => state.props.volunteer_id
-    const sel_has_edit_permission = (state: State) => state.other.has_edit_permission
+    const sel_has_edit_permission = (state: State) => true
 
     const sel_get_volunteers_query_params = createSelector(
       sel_volunteer_id,
-      (volunteer_id): [string[], { availability_slots: true }] => ([
-        [ volunteer_id ], 
-        { availability_slots: true}
-      ])
+      (volunteer_id): UseFindVolunteersOptions => ({
+        find_many: {
+          where: { id: volunteer_id },
+          include: { availability_slots: true }        
+        }
+      })
     )
 
     const sel_volunteer_query = createSelector(
-      (state: State) => state.other.volunteers_query,
+      (state: State) => state.injected.volunteers_query,
       (query): VolunteerInfo | null => query?.data?.[0] as VolunteerInfo || null
     )
 
@@ -59,10 +58,8 @@ export const useSelectors = ()=> {
       sel_edit,
       sel_volunteer_query,
       (edit, volunteer_query) => {
-        if (!volunteer_query) return []
+        if (!volunteer_query?.availability_slots) return []
         if (!edit) return volunteer_query.availability_slots
-
-        console.log("deleted slots", edit.deleted_availability_slots)
 
         return (volunteer_query.availability_slots
           .map((slot) => {
@@ -105,26 +102,32 @@ export const useSelectors = ()=> {
     const sel_on_save_args = createSelector(
       sel_volunteer_query,
       sel_edit,
-      (volunteer_query, edit): VolunteerUpdateArgs[] | null => {
+      (volunteer_query, edit): CUDVolunteersArgs | null => {
         if (!volunteer_query) return null
         if (!edit) return null
-
-        return [{
-          where: { id: volunteer_query.id },
-          data: {
-            ..._.omit(edit.volunteer, "availability_slots"),
-            availability_slots: {            
-              deleteMany: edit.deleted_availability_slots.map((id) => ({ id })),
-              create: edit.new_availability_slots.map(slot => _.omit(slot, "id", "volunteer_id")),
-              update: edit.updated_availability_slots
-                .map((slot) => ({ 
-                  where: { id: slot.id }, 
-                  data: _.omit(slot, "volunteer_id")
-                }))
+        return {
+          update: [{
+            where: { id: volunteer_query.id },
+            data: {
+              ..._.omit(edit.volunteer, "availability_slots"),
+              availability_slots: {            
+                deleteMany: edit.deleted_availability_slots.map((id) => ({ id })),
+                create: edit.new_availability_slots.map(slot => _.omit(slot, "id", "volunteer_id")),
+                update: edit.updated_availability_slots
+                  .map((slot) => ({ 
+                    where: { id: slot.id }, 
+                    data: _.omit(slot, "volunteer_id")
+                  }))
+              }
             }
-          }
-        }]
+          }],
+        }
       }
+    )
+
+    const sel_notes = createSelector(
+      sel_volunteer,
+      (volunteer) => volunteer?.notes || ""
     )
 
 
@@ -137,7 +140,8 @@ export const useSelectors = ()=> {
       sel_is_editing,
       sel_availability_slots_calendar_events,
       sel_calender_props,
-      sel_on_save_args
+      sel_on_save_args,
+      sel_notes,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }
