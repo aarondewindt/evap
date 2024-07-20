@@ -154,5 +154,6 @@ export const useActions = (
     on_calender_select_slot,
     on_calendar_double_click,
     on_calendar_event_edit,
+    on_help_msg_shown: () => a.set_help_msg_shown_before(true),
   }
 }

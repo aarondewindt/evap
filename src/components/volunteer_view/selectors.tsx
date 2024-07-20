@@ -130,6 +130,12 @@ export const useSelectors = ()=> {
       (volunteer) => volunteer?.notes || ""
     )
 
+    const sel_volunteer_name = createSelector(
+      sel_volunteer,
+      (volunteer) => volunteer?.name || ""
+    )
+
+    const sel_help_msg_shown_before = (state: State) => state.injected.help_msg_shown_before
 
     return {
       sel_volunteer_id,
@@ -142,6 +148,8 @@ export const useSelectors = ()=> {
       sel_calender_props,
       sel_on_save_args,
       sel_notes,
+      sel_volunteer_name,
+      sel_help_msg_shown_before,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

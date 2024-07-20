@@ -14,10 +14,16 @@ export const useSelectors = ()=> {
     const sel_session_query = (state: State) => state.injected.session
     const sel_session = createSelector(sel_session_query, (query) => query?.data ?? null)
 
+    const sel_user_is_volunteer = createSelector(
+      sel_session,
+      (session): boolean => !session?.authenticated
+    )
+
     return {
       sel_is_nav_open,
       sel_is_mobile_screen,
       sel_session,
+      sel_user_is_volunteer,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

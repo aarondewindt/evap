@@ -1,17 +1,18 @@
 "use client"
 
-import { Box, Paper, Stack, Text, TextInput, Title } from "@mantine/core"
+import { Box, Button, List, Paper, Stack, Text, TextInput, Title } from "@mantine/core"
 import type { CalendarEvent, VolunteerViewProps } from "./types"
 import { VolunteerViewProvider, useVolunteerViewContext } from "./context"
 import { Toolbar } from "../toolbar"
-import { IconCancel, IconDeviceFloppy, IconEdit } from "@tabler/icons-react"
-import React, { ChangeEvent, useCallback, useMemo, useState } from "react"
+import { IconCancel, IconDeviceFloppy, IconEdit, IconHelp } from "@tabler/icons-react"
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
 import { Calendar, Views } from "react-big-calendar"
 import { localizer, DnDCalendar } from "@/calendar_localizer"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { ExpandHeight } from "@/utils/expand_height"
 import { BigCalendar } from "../big_calendar"
 import { RichText } from "../rich_text"
+import { modals } from "@mantine/modals"
 
 
 
@@ -27,16 +28,62 @@ export const VolunteerView = (props: VolunteerViewProps) => {
 const VolunteerViewInner = ({}: {}) => {
   const ctx = useVolunteerViewContext()
 
+  const show_help_modal = () => {
+    modals.open({
+      title: <>
+        Thanks for volunteering for SoWee 2024!!
+      </>,
+      children: <>
+        <Text>
+          On this page you can edit your availability and eventually view your schedule. Feel free to leave any notes for the 
+          SoWee comittee here or contact us through the Whatsapp group if you have any questions.
+        </Text>
+        <Text mt="sm">
+          To edit your availability:
+        </Text>
+        <List>
+          <List.Item>Start by clicking the edit button.</List.Item>
+          <List.Item>Click and drag on the calendar to mark time slots as available.</List.Item>
+          <List.Item>Double click slots to delete them.</List.Item>
+          <List.Item>And remember to save when you are done editing!!</List.Item>
+        </List>
+        <Box mt="sm">
+          <Text fw={700}>You have untill the 1st of August to edit your availability.</Text> Please contact Aaron de Windt directly if you 
+          need to make changes after this date.
+        </Box>
+        <Button mt="xl" fullWidth onClick={() => modals.closeAll()}>Got it!</Button>
+      </>,
+      size: "xl",
+    })
+  }
+
+  useEffect(() => {
+    const timeout_id = setTimeout(() => {
+      if (!ctx.help_msg_shown_before) {
+        show_help_modal()
+        ctx.on_help_msg_shown()
+      }
+    }, 500)
+
+    return () => { clearTimeout(timeout_id) }
+  })
+
   return <>
     <Toolbar
-      left={<Text c="gray" size="xs">ID: {ctx.volunteer_id ?? "-"}</Text>} 
-      right={<EditSaveCancelToolbarButton
+      left={<EditSaveCancelToolbarButton
         is_editing={ctx.is_editing}
         readonly={!ctx.has_edit_permission}
         onEdit={ctx.on_enable_editing}
         onSave={ctx.on_save}
         onCancel={ctx.on_cancel_editing}
       />}
+      right={<>
+        <Toolbar.Button
+          leftSection={<IconHelp/>}
+          onClick={show_help_modal}>
+            Help
+        </Toolbar.Button>
+      </>}
     />
     <Stack p="sm" pb={0}>
       <TextInput 

@@ -1,3 +1,4 @@
+"use client"
 
 import { } from "@mantine/core"
 import type { BigCalendarProps } from "./types"

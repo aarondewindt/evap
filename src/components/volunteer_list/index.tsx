@@ -1,7 +1,7 @@
 "use client"
 
 
-import { Table, Text, TextInput } from "@mantine/core"
+import { Stack, Table, Text, TextInput, Title } from "@mantine/core"
 import type { VolunteerListProps } from "./types"
 import { VolunteerListProvider, useVolunteerListContext } from "./context"
 import { Toolbar } from "../toolbar"
@@ -32,28 +32,37 @@ const VolunteerListInner = ({}: {}) => {
       </>}
     />
 
-    <TextInput m="xs" 
-               placeholder="Search volunteers"
-               onChange={(e) => ctx.on_search_query_change(e.currentTarget.value)}
-               />
+    <Stack gap="xs" p="xs">
+      <Title order={3} >
+        Welcome to the SoWee 2024 volunteer list!!
+      </Title>
+      <Text>
+        { "If you can't find yourself in the list, please use the 'New volunteer' button shown above to register." }
+      </Text>
 
-    <Table striped highlightOnHover>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Name</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody style={{cursor: "pointer"}}>
-        {ctx.volunteers?.map((volunteer) => (
-          <Table.Tr key={volunteer.id}
-                    onClick={() => { router.push(`/volunteers/${volunteer.id}`) }}
-                    >
-            <Table.Td>
-              <Text>{volunteer.name}</Text>
-            </Table.Td>
+      <TextInput 
+                placeholder="Search volunteers"
+                onChange={(e) => ctx.on_search_query_change(e.currentTarget.value)}
+                />
+
+      <Table striped highlightOnHover>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Name</Table.Th>
           </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
+        </Table.Thead>
+        <Table.Tbody style={{cursor: "pointer"}}>
+          {ctx.volunteers?.map((volunteer) => (
+            <Table.Tr key={volunteer.id}
+                      onClick={() => { router.push(`/volunteers/${volunteer.id}`) }}
+                      >
+              <Table.Td>
+                <Text>{volunteer.name}</Text>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </Stack>
   </>
 }

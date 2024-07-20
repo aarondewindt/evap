@@ -31,6 +31,7 @@ export type Memory = {
 export type Injected = {
   volunteers_query?: ReturnType<typeof useFindVolunteers>
   cud_volunteers_mutation?: ReturnType<typeof useCUDVolunteers>
+  help_msg_shown_before?: boolean
 }
 
 export interface VolunteerViewProviderProps extends VolunteerViewProps {
