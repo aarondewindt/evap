@@ -1,4 +1,4 @@
-import { useGetAllVolunteers } from '@/server_actions/volunteers/hooks'
+import { useCUDVolunteers, useFindVolunteers } from '@/server_actions/volunteers/hooks'
 import type { ReactNode } from 'react'
 
 
@@ -7,12 +7,12 @@ export type VolunteerListProps = {
 }
 
 export type Memory = { 
-  
+  search_query: string
 }
 
-export type ServerActions = { 
-  all_volunteers?: ReturnType<typeof useGetAllVolunteers>
-  has_edit_permission?: boolean
+export type Injected = { 
+  all_volunteers?: ReturnType<typeof useFindVolunteers>
+  cud_volunteers_mutation?: ReturnType<typeof useCUDVolunteers>
 }
 
 export interface VolunteerListProviderProps extends VolunteerListProps {
@@ -22,7 +22,9 @@ export interface VolunteerListProviderProps extends VolunteerListProps {
 export interface State {
   memory: Memory
   props: VolunteerListProps
-  server_actions: ServerActions
+  injected: Injected
 }
 
-export const init_memory: Memory = { foo: 0 }
+export const init_memory: Memory = { 
+  search_query: ""
+}

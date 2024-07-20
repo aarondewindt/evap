@@ -1,7 +1,7 @@
 "use client"
 
 
-import { Table, Text } from "@mantine/core"
+import { Table, Text, TextInput } from "@mantine/core"
 import type { VolunteerListProps } from "./types"
 import { VolunteerListProvider, useVolunteerListContext } from "./context"
 import { Toolbar } from "../toolbar"
@@ -32,6 +32,11 @@ const VolunteerListInner = ({}: {}) => {
       </>}
     />
 
+    <TextInput m="xs" 
+               placeholder="Search volunteers"
+               onChange={(e) => ctx.on_search_query_change(e.currentTarget.value)}
+               />
+
     <Table striped highlightOnHover>
       <Table.Thead>
         <Table.Tr>
@@ -39,7 +44,7 @@ const VolunteerListInner = ({}: {}) => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody style={{cursor: "pointer"}}>
-        {ctx.all_volunteers?.map((volunteer) => (
+        {ctx.volunteers?.map((volunteer) => (
           <Table.Tr key={volunteer.id}
                     onClick={() => { router.push(`/volunteers/${volunteer.id}`) }}
                     >

@@ -52,7 +52,7 @@ const VolunteerViewInner = ({}: {}) => {
         
         calendar_props={{
           popup: true,
-          draggableAccessor: (event) => true,
+          draggableAccessor: (event) => ctx.is_editing,
           onSelectEvent: ctx.on_calender_select_event,
           onSelectSlot: ctx.on_calender_select_slot,
           onDoubleClickEvent: ctx.on_calendar_double_click,
@@ -60,7 +60,7 @@ const VolunteerViewInner = ({}: {}) => {
           onEventResize: ctx.on_calendar_event_edit,
 
           ...ctx.calender_props
-        }}     
+        }}
       />
 
     </Stack>

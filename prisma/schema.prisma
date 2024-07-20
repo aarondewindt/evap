@@ -86,6 +86,12 @@ model Event {
   notes             String?
   start_datetime    DateTime
   end_datetime      DateTime
+
+  localtion_id      String
+  location          Location        @relation(fields: [localtion_id], references: [id])
+
+  activities  EventActivity[]
+  tasks       EventTask[]
 }
 
 
@@ -99,6 +105,7 @@ model Volunteer {
   notes         String?
 
   availability_slots        VolunteerAvailabilitySlot[]
+  event_tasks               VolunteerEventTask[]
 }
 
 
@@ -112,4 +119,62 @@ model VolunteerAvailabilitySlot {
 }
 
 
+model EventActivity {
+  id            String          @id @default(cuid())
+  event_id      String
+  name          String
+  description   String
+  start_datetime DateTime
+  end_datetime  DateTime
+  notes         String?
+
+  location_id   String
+  location      Location        @relation(fields: [location_id], references: [id])
+
+  event         Event           @relation(fields: [event_id], references: [id])
+}
+
+
+model EventTask {
+  id            String          @id @default(cuid())
+  event_id      String
+  name          String
+  description   String
+  start_datetime DateTime
+  end_datetime  DateTime
+  notes         String?
+
+  location_id   String
+  location      Location        @relation(fields: [location_id], references: [id])
+
+  event         Event           @relation(fields: [event_id], references: [id])
+  volunteers    VolunteerEventTask[]
+}
+
+
+model VolunteerEventTask {
+  id            String          @id @default(cuid())
+  volunteer_id  String
+  event_task_id String
+  start_datetime DateTime
+  end_datetime  DateTime
+
+  volunteer     Volunteer       @relation(fields: [volunteer_id], references: [id])
+  event_task    EventTask       @relation(fields: [event_task_id], references: [id])
+}
+
+
+model Location {
+  id            String          @id @default(cuid())
+  name          String
+  description   String
+  address       String
+  maps_url      String 
+  notes         String?
+
+  events        Event[]
+  event_activities EventActivity[]
+  event_tasks  EventTask[]
+
+}
 

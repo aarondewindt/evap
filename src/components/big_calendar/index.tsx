@@ -26,41 +26,6 @@ export type BigCalendarEvent = {
 
 const DnDCalendar = withDragAndDrop(Calendar)
 
-export const createBigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>
-                                 () => {  
-  const TypedDnDCalendar = DnDCalendar as unknown as ReturnType<typeof withDragAndDrop<TEvent, TEvent['resource']>>
-
-  return (props: BigCalendarProps<TEvent, TEvent['resource']>) => {
-    // This is not a react context. This instance must be passed to all child components
-    const calendar_props = props.calendar_props ?? {}
-
-    const ctx = useBigCalendarContext(props)
-
-    const expand_height_wrapper = ctx.expand_height ? ExpandHeight : Fragment
-
-    console.log("BigCalendar", { calendar_props, ctx })
-
-    return expand_height_wrapper({ children: 
-      <TypedDnDCalendar
-        localizer={localizer}
-        // dayLayoutAlgorithm="no-overlap"
-        step={15}
-        timeslots={4}
-        popup
-
-        onNavigate={ctx.on_calendar_navigate}
-        onView={ctx.on_calendar_view_change}
-
-        draggableAccessor={(event) => true}
-
-        {...calendar_props}
-        {...ctx.calender_props}
-        
-      />})
-  }
-}
-
-
 export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(props: BigCalendarProps<TEvent, TEvent['resource']>) => {
   const TypedDnDCalendar = DnDCalendar as unknown as ReturnType<typeof withDragAndDrop<TEvent, TEvent['resource']>>
   const ctx = useBigCalendarContext(props)
@@ -74,7 +39,7 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
       localizer={localizer}
       // dayLayoutAlgorithm="no-overlap"
       step={15}
-      timeslots={8}
+      timeslots={4}
       popup
 
       onNavigate={ctx.on_calendar_navigate}
