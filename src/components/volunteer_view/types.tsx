@@ -3,6 +3,7 @@ import { Prisma } from '@/db'
 import type { ReactNode } from 'react'
 import { View, Event as RbcEvent } from 'react-big-calendar'
 import { BigCalendarEvent } from '../big_calendar'
+import { useGlobalVolunteerSettings } from '@/server_actions/global_volunteer_settings/hooks'
 
 export type VolunteerInfo = Prisma.VolunteerGetPayload<{ include: { availability_slots: true }}>
 
@@ -31,6 +32,7 @@ export type Memory = {
 export type Injected = {
   volunteers_query?: ReturnType<typeof useFindVolunteers>
   cud_volunteers_mutation?: ReturnType<typeof useCUDVolunteers>
+  global_volunteer_settings?: ReturnType<typeof useGlobalVolunteerSettings>
   help_msg_shown_before?: boolean
 }
 

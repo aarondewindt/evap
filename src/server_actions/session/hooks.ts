@@ -21,8 +21,9 @@ export const useCheckPermissions = (permissions: Permission[]) => {
   permissions = permissions ?? []
 
   const has_permission = useMemo(() => {
+    if (gctx.is_session_fetching) return null
     return check_permission(gctx.session, permissions)
-  }, [ gctx.session, permissions ])
+  }, [ gctx.session, permissions, gctx.is_session_fetching ])
 
   return has_permission
 }

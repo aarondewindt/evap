@@ -5,6 +5,7 @@ import { useCUDVolunteers, useFindVolunteers } from "@/server_actions/volunteers
 import { useCheckPermissions } from "@/server_actions/session/hooks"
 import { permissions } from "@/server_actions/session/types"
 import { useLocalStorage } from "@mantine/hooks"
+import { useGlobalVolunteerSettings } from "@/server_actions/global_volunteer_settings/hooks"
 
 
 export const useInject = (state: State, s: Selectors) => {
@@ -17,6 +18,7 @@ export const useInject = (state: State, s: Selectors) => {
   const state_1 = useInjectValues(state, "injected", {
     volunteers_query: useFindVolunteers(s.sel_get_volunteers_query_params(state)),
     cud_volunteers_mutation,
+    global_volunteer_settings: useGlobalVolunteerSettings(),
     help_msg_shown_before
   })
 

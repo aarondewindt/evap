@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { IconConfetti, IconHome2, IconUsersGroup } from '@tabler/icons-react';
+import { IconConfetti, IconHome2, IconSettings, IconUsersGroup } from '@tabler/icons-react';
 
 
 export type NavItem = {
@@ -7,6 +7,8 @@ export type NavItem = {
   href: string
   left_section?: ReactNode
   active_pathname_pattern?: RegExp
+  must_be_authenticated?: boolean
+  children?: NavItem[]
 }
 
 export type NavMap = NavItem[]
@@ -23,7 +25,8 @@ export const navmap: NavMap = [
     label: "Events",
     href: "/events",
     left_section: <IconConfetti size="1rem" stroke={1.5}/>,
-    active_pathname_pattern: /^\/events/
+    active_pathname_pattern: /^\/events/,
+    must_be_authenticated: true
   },
   {
     label: "Volunteers",
@@ -31,4 +34,23 @@ export const navmap: NavMap = [
     left_section: <IconUsersGroup size="1rem" stroke={1.5}/>,
     active_pathname_pattern: /^\/volunteers/
   },
+  {
+    label: "Admin",
+    href: "/admin",
+    left_section: <IconSettings size="1rem" stroke={1.5}/>,
+    active_pathname_pattern: /^\/admin/,
+    must_be_authenticated: true,
+    children: [
+      {
+        label: "Users",
+        href: "/admin/users",
+        active_pathname_pattern: /^\/admin\/users/
+      },
+      {
+        label: "Volunteers",
+        href: "/admin/volunteers",
+        active_pathname_pattern: /^\/admin\/volunteers/
+      }
+    ]
+  }
 ]

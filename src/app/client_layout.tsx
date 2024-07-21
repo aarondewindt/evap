@@ -35,7 +35,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
         <QueryClientProvider client={queryClient}>
           <SessionProvider>
             <GlobalStateProvider>
-              <NavigationProgress color='red'/>
+              <NavigationProgress color='gray.0'/>
               <NProgressProvider>
                 {children}
               </NProgressProvider>

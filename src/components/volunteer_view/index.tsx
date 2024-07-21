@@ -13,6 +13,7 @@ import { ExpandHeight } from "@/utils/expand_height"
 import { BigCalendar } from "../big_calendar"
 import { RichText } from "../rich_text"
 import { modals } from "@mantine/modals"
+import { DT } from "../datetime"
 
 
 
@@ -47,10 +48,17 @@ const VolunteerViewInner = ({}: {}) => {
           <List.Item>Double click slots to delete them.</List.Item>
           <List.Item>And remember to save when you are done editing!!</List.Item>
         </List>
-        <Box mt="sm">
-          <Text fw={700}>You have untill the 1st of August to edit your availability.</Text> Please contact Aaron de Windt directly if you 
-          need to make changes after this date.
-        </Box>
+        { ctx.edit_deadline && 
+          <Box mt="sm">
+            <Text fw={700}>
+              You have untill 
+              the <DT date={ctx.edit_deadline} format="Do [of] MMMM"/> to edit your availability.
+            </Text>             
+            Please contact Aaron de Windt directly if you 
+            need to make changes after this date.
+          </Box>
+        }
+        
         <Button mt="xl" fullWidth onClick={() => modals.closeAll()}>Got it!</Button>
       </>,
       size: "xl",
@@ -72,11 +80,22 @@ const VolunteerViewInner = ({}: {}) => {
     <Toolbar
       left={<EditSaveCancelToolbarButton
         is_editing={ctx.is_editing}
-        readonly={!ctx.has_edit_permission}
+        readonly={!ctx.has_edit_permission || ctx.has_deadline_passed}
         onEdit={ctx.on_enable_editing}
         onSave={ctx.on_save}
         onCancel={ctx.on_cancel_editing}
       />}
+
+      center={<>{
+        ctx.has_deadline_passed ? <>
+          <Toolbar.Text color="red.5">Deadline has passed</Toolbar.Text>
+        </> : <>{
+          ctx.edit_deadline &&
+          <Toolbar.Text>Deadline: <DT date={ctx.edit_deadline} format="Do [of] MMMM"/></Toolbar.Text>
+        }</>
+        
+      }</>}
+
       right={<>
         <Toolbar.Button
           leftSection={<IconHelp/>}

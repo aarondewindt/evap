@@ -13,6 +13,7 @@ export const useSelectors = ()=> {
 
     const sel_session_query = (state: State) => state.injected.session
     const sel_session = createSelector(sel_session_query, (query) => query?.data ?? null)
+    const sel_is_session_fetching = createSelector(sel_session_query, (query) => query?.isFetching ?? false)
 
     const sel_user_is_volunteer = createSelector(
       sel_session,
@@ -24,6 +25,7 @@ export const useSelectors = ()=> {
       sel_is_mobile_screen,
       sel_session,
       sel_user_is_volunteer,
+      sel_is_session_fetching,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

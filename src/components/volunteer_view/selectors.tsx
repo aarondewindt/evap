@@ -137,6 +137,18 @@ export const useSelectors = ()=> {
 
     const sel_help_msg_shown_before = (state: State) => state.injected.help_msg_shown_before
 
+    const sel_global_volunteer_settings = (state: State) => state.injected.global_volunteer_settings
+    
+    const sel_edit_deadline = createSelector(
+      sel_global_volunteer_settings,
+      (settings) => settings?.data?.edit_deadline ?? null
+    )
+
+    const sel_has_deadline_passed = createSelector(
+      sel_edit_deadline,
+      (deadline) => deadline ? new Date() > deadline : false
+    )
+
     return {
       sel_volunteer_id,
       sel_has_edit_permission,
@@ -150,6 +162,8 @@ export const useSelectors = ()=> {
       sel_notes,
       sel_volunteer_name,
       sel_help_msg_shown_before,
+      sel_edit_deadline,
+      sel_has_deadline_passed,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

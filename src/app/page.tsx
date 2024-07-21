@@ -22,7 +22,6 @@ export default function Home() {
       <Paper bg="gray.2" radius="md" withBorder p="xl">
         <Title order={1} mb="md">Welcome to the SoWee 2024 event planner!!</Title>
         <Button component={Link} href="/volunteers" size="lg" color="dark">Go to the volunteer list</Button>
-
       </Paper>
   </Container>
 
