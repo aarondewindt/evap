@@ -37,7 +37,7 @@ const VolunteerListInner = ({}: {}) => {
         Welcome to the SoWee 2024 volunteer list!!
       </Title>
       <Text>
-        { "If you can't find yourself in the list, please use the 'New volunteer' button shown above to register." }
+        { "If this is you first time here, please click on the 'New volunteer' button to add yourself to the list." }
       </Text>
 
       <TextInput 

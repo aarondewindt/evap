@@ -1,10 +1,11 @@
 "use client"
-import { Paper, Text } from "@mantine/core";
+import { Button, Container, Paper, Text, Title } from "@mantine/core";
 import { useGlobalStateContext } from "./global_state";
 
 import { hello } from "@/server_actions/hello";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@/components/link";
 
 
 export default function Home() {
@@ -17,16 +18,13 @@ export default function Home() {
     }
   })
 
-  return <Paper>
-    <Text c="grape">Home</Text>
-    <Text c="grape">
-      {gctx.state.injected.is_mobile_screen ? "mobile" : "desktop"}
-    </Text>
+  return <Container p={0} mt="xl">
+      <Paper bg="gray.2" radius="md" withBorder p="xl">
+        <Title order={1} mb="md">Welcome to the SoWee 2024 event planner!!</Title>
+        <Button component={Link} href="/volunteers" size="lg" color="dark">Go to the volunteer list</Button>
 
-    <Text ff="monospace">
-      { JSON.stringify(data) }
-    </Text>
+      </Paper>
+  </Container>
 
-  </Paper>
   ;
 }
