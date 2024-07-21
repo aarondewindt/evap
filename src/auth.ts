@@ -13,7 +13,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // Typescript isn't aware that we have a user object from the database here.
       // So we need to cast it to the correct type.
       const typed_user = user as Prisma.UserGetPayload<{}>
-      
+
+      if (typed_user.email === process.env.AUTH_SUPERUSER_EMAIL) return true
+
       if (typed_user.is_superuser) return true
       if (!typed_user.is_verified) return "/unverified_user"
 
