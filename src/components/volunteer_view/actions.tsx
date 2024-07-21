@@ -126,11 +126,9 @@ export const useActions = (
       start = new Date(start)
       end = new Date(end)
       if (slot) {
-        console.log("updating slot 2nd", slot)
         slot.start_datetime = start
         slot.end_datetime = end
       } else {
-        console.log("updating slot 1st", slot)
         draft.memory.edit.updated_availability_slots.push({
           id: slot_id,
           volunteer_id: draft.memory.edit.volunteer.id,
@@ -138,6 +136,13 @@ export const useActions = (
           end_datetime: end
         })
       }
+    })
+  }, [ set_state ])
+
+  const on_global_volunteer_settings_loaded = useCallback(() => {
+    set_state((draft) => {
+      draft.memory.calendar_date = draft.injected.global_volunteer_settings?.data?.default_calendar_date ?? draft.memory.calendar_date
+      draft.memory.calendar_view = draft.injected.global_volunteer_settings?.data?.default_calendar_view ?? draft.memory.calendar_view
     })
   }, [ set_state ])
 
@@ -154,6 +159,7 @@ export const useActions = (
     on_calender_select_slot,
     on_calendar_double_click,
     on_calendar_event_edit,
+    on_global_volunteer_settings_loaded,
     on_help_msg_shown: () => a.set_help_msg_shown_before(true),
   }
 }

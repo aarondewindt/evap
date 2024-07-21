@@ -14,6 +14,7 @@ import { BigCalendar } from "../big_calendar"
 import { RichText } from "../rich_text"
 import { modals } from "@mantine/modals"
 import { DT } from "../datetime"
+import { useDidUpdate } from "@mantine/hooks"
 
 
 
@@ -65,16 +66,18 @@ const VolunteerViewInner = ({}: {}) => {
     })
   }
 
-  useEffect(() => {
-    const timeout_id = setTimeout(() => {
+  const gvs_is_success = ctx.global_volunteer_settings?.isSuccess
+  
+  useDidUpdate(() => {
+    if (gvs_is_success) {
+      console.log("gvs_is_success")
+      ctx.on_global_volunteer_settings_loaded()
       if (!ctx.help_msg_shown_before) {
         show_help_modal()
         ctx.on_help_msg_shown()
       }
-    }, 500)
-
-    return () => { clearTimeout(timeout_id) }
-  })
+    }   
+  }, [ gvs_is_success ])
 
   return <>
     <Toolbar
@@ -127,6 +130,8 @@ const VolunteerViewInner = ({}: {}) => {
           onDoubleClickEvent: ctx.on_calendar_double_click,
           onEventDrop: ctx.on_calendar_event_edit,
           onEventResize: ctx.on_calendar_event_edit,
+          onView: ctx.on_calendar_view_change,
+          onNavigate: ctx.on_calendar_navidate,
 
           ...ctx.calender_props
         }}

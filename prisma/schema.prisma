@@ -178,10 +178,21 @@ model Location {
 
 }
 
+enum BigCalendarView {
+  month
+  week
+  work_week
+  day
+  agenda
+}
+
 model GlobalVolunteerSetting {
   id                              String          @id @default(cuid())
 
   edit_deadline                   DateTime?
+
+  default_calendar_date           DateTime?
+  default_calendar_view           BigCalendarView?
 
   deadline_exceptions             GlobalVolunteerSettingsDeadlineException[]
 

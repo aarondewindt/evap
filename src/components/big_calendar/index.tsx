@@ -47,8 +47,8 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
       onNavigate={ctx.on_calendar_navigate}
       onView={ctx.on_calendar_view_change}
 
-      {...calendar_props}
       {...ctx.calender_props}
+      {...calendar_props}
     />
   })
   

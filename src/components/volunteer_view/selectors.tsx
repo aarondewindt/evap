@@ -149,6 +149,8 @@ export const useSelectors = ()=> {
       (deadline) => deadline ? new Date() > deadline : false
     )
 
+    const sel_have_calendar_settings_been_set = (state: State) => state.memory.calendar_settings_set
+
     return {
       sel_volunteer_id,
       sel_has_edit_permission,
@@ -164,6 +166,8 @@ export const useSelectors = ()=> {
       sel_help_msg_shown_before,
       sel_edit_deadline,
       sel_has_deadline_passed,
+      sel_global_volunteer_settings,
+      sel_have_calendar_settings_been_set
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

@@ -25,6 +25,7 @@ export type Memory = {
 
   calendar_date: Date
   calendar_view: View
+  calendar_settings_set: boolean
 
   selected_slot_id: string | null
 }
@@ -50,5 +51,6 @@ export const init_memory: Memory = {
   edit: null,
   calendar_date: new Date(),
   calendar_view: 'week',
-  selected_slot_id: null
+  selected_slot_id: null,
+  calendar_settings_set: false,
 }
