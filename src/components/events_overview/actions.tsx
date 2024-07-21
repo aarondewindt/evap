@@ -75,7 +75,8 @@ export const useActions = (
         end_datetime: slot_info.end,
         name: "New Event",
         description: "",
-        notes: ""
+        notes: "",
+        location_id: null
       })
     })
   }, [ set_state ])

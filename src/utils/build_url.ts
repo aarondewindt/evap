@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import JsonURL from "@jsonurl/jsonurl";
+// import JsonURL from "@jsonurl/jsonurl";
 
 type ParamValue = string | number | string[] | number[] | boolean | boolean[]
 type ParamValueNullable = ParamValue | undefined | null
@@ -50,7 +50,7 @@ export const build_url_ninja = (path_name: string, search_params: {[key: string]
 }
 
 
-export const build_url_jsonurl = (path_name: string, key: string, value: any) => {
-  const encoded_value = encodeURIComponent(JsonURL.stringify(value, { AQF: true }) ?? "")
-  return `${path_name}?${key}=${encoded_value}`
-}
+// export const build_url_jsonurl = (path_name: string, key: string, value: any) => {
+//   const encoded_value = encodeURIComponent(JsonURL.stringify(value, { AQF: true }) ?? "")
+//   return `${path_name}?${key}=${encoded_value}`
+// }

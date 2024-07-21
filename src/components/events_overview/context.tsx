@@ -4,7 +4,6 @@ import {produce, Draft} from "immer"
 
 import { init_memory, State, EventsOverviewProviderProps, init_local_storage } from "./types"
 import { useSelectors, SelectedValues } from "./selectors"
-import { useURLState } from '@/utils/use_url_state';
 import { useActions } from './actions';
 import { useInject } from './inject';
 

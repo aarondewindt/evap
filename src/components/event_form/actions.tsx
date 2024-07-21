@@ -39,38 +39,38 @@ export const useActions = (
   }, [ set_state ])
 
   const on_save = useCallback(async () => {
-    const mode = s.sel_mode(state)
-    if (mode !== "edit") return
+    // const mode = s.sel_mode(state)
+    // if (mode !== "edit") return
 
-    const event_id = s.sel_event_id(state)
-    if (!event_id) return
+    // const event_id = s.sel_event_id(state)
+    // if (!event_id) return
 
-    const form_values = s.sel_form_values(state)    
-    if (!form_values) return
+    // const form_values = s.sel_form_values(state)    
+    // if (!form_values) return
 
-    await a.update_events([{
-      id: event_id,
-      ...form_values
-    }])
+    // await a.update_events([{
+    //   id: event_id,
+    //   ...form_values
+    // }])
 
-    ref.current.set_state((draft) => {
-      draft.memory.form = {
-        mode: "view"
-      }
-    })
+    // ref.current.set_state((draft) => {
+    //   draft.memory.form = {
+    //     mode: "view"
+    //   }
+    // })
   }, [ s, a, ref, state ])
 
   const on_create = useCallback(async () => {
-    const form_values = s.sel_form_values(state)
-    if (!form_values) return
+    // const form_values = s.sel_form_values(state)
+    // if (!form_values) return
 
-    await a.create_events([ form_values ])
+    // await a.create_events([ form_values ])
 
-    ref.current.set_state((draft) => {
-      draft.memory.form = {
-        mode: "created"
-      }
-    })
+    // ref.current.set_state((draft) => {
+    //   draft.memory.form = {
+    //     mode: "created"
+    //   }
+    // })
   }, [ s, a, ref, state ])
 
   const on_change_form_value = useCallback(<T extends keyof FormValues,>(key: T, value: FormValues[T]) => { 

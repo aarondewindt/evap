@@ -7,7 +7,7 @@ import { Toolbar } from "../toolbar"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { DnDCalendar, localizer } from "@/calendar_localizer"
 import { ExpandHeight } from "@/utils/expand_height"
-import { BigCalendar, createBigCalendar } from "../big_calendar"
+import { BigCalendar } from "../big_calendar"
 import { Prisma } from "@/db"
 
 

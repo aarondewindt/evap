@@ -2,7 +2,7 @@ import { useGetAllEvents } from '@/server_actions/events/hooks'
 import { Prisma } from '@prisma/client'
 import type { ReactNode } from 'react'
 import { View } from 'react-big-calendar'
-import { BigCalendarEvent } from '../big_calendar'
+import { BigCalendarEvent } from '../big_calendar/types'
 
 
 export type CalendarEvent = BigCalendarEvent & {
@@ -34,7 +34,7 @@ export type LocalStorage = {
 
 export type Injected = {
   events_query?: ReturnType<typeof useGetAllEvents>
-  has_edit_permission?: boolean
+  has_edit_permission?: boolean | null
 }
 
 export interface EventsOverviewProviderProps extends EventsOverviewProps {
