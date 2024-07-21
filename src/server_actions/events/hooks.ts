@@ -57,7 +57,7 @@ export const useDeleteEvents = () => {
 
 export const useFindManyEvents = (args: EventFindManyArgs) => {
   return useQuery({
-    queryKey: ["events"],
+    queryKey: ["events", args],
     queryFn: async () => {
       return await find_many_events(args)
     },

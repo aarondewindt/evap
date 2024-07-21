@@ -10,7 +10,7 @@ export type UseFindUsersOptions = {
 
 export const useFindUsers = (options: UseFindUsersOptions) => {
   return useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", options],
     queryFn: async () => {
       return await find_users(options.find_many)
     }

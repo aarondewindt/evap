@@ -10,7 +10,7 @@ export type UseFindVolunteersOptions = {
 
 export const useFindVolunteers = (options: UseFindVolunteersOptions) => {
   return useQuery({
-    queryKey: ["volunteers"],
+    queryKey: ["volunteers", options],
     queryFn: async () => {
       return await find_volunteers(options.find_many)
     }

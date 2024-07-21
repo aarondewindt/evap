@@ -21,7 +21,7 @@ export const useGlobalVolunteerSettings = () => {
 
 export const useFindGlobalVolunteerSettings = (options: UseFindGlobalVolunteerSettingsOptions) => {
   return useQuery({
-    queryKey: ["globalVolunteerSettings"],
+    queryKey: ["globalVolunteerSettings", options],
     queryFn: async () => {
       return await find_globalVolunteerSettings(options.find_many)
     }
