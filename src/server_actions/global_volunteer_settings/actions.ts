@@ -14,6 +14,10 @@ export type GlobalVolunteerSettingDeleteArgs = Parameters<typeof prisma.globalVo
 export type GlobalVolunteerSettingDeleteManyArgs = Parameters<typeof prisma.globalVolunteerSetting.deleteMany>[0]
 
 
+export const get_globalVolunteerSetting = async () => {
+  return await prisma.globalVolunteerSetting.findFirst({ orderBy: { created_at: "desc" } })
+}
+
 export const find_globalVolunteerSettings = async (args: GlobalVolunteerSettingFindManyArgs) => {
   return await prisma.globalVolunteerSetting.findMany(args)
 }
