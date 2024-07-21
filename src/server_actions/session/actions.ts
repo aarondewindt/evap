@@ -24,7 +24,7 @@ export const get_session = async (): Promise<AppSession> =>{
       name: auth_session.user.name,
       email: auth_session.user.email,
       image: auth_session.user.image ?? null,
-      is_super_user: user.is_super_user
+      is_superuser: user.is_superuser
     }
   }
 }

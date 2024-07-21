@@ -10,7 +10,6 @@ export const Navbar = () => {
   const gctx = useGlobalStateContext()
   const pathname = usePathname()
   
-
   return <Stack justify="space-between" h="100%" p={0}>
     <Box p={0}>
       { navmap.map((navitem) => 
@@ -25,7 +24,7 @@ export const Navbar = () => {
       )}
     </Box>
     <Box p="md">
-      { gctx.is_mobile_screen && <SessionStatus/> }
+      { gctx.is_mobile_screen && <SessionStatus text_color="red"/> }
     </Box>
     
   </Stack>

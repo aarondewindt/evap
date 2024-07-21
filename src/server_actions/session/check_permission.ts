@@ -11,7 +11,7 @@ export const check_permission = (session: AppSession | undefined | null, permiss
   const any_authenticated = permissions.find(p => p.type === "any_authenticated")
   if (any_authenticated) return true
 
-  if (session.user.is_super_user) return true
+  if (session.user.is_superuser) return true
 
   return false
 }

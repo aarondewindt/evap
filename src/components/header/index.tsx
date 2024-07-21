@@ -10,8 +10,8 @@ export const Header = () => {
     <Box>
       <Burger opened={gctx.is_nav_open} hiddenFrom='sm' size="sm" onClick={gctx.on_nav_toggle}/>
     </Box>
-    <Box pos="relative" top={-5} c="red.1">
-      { !gctx.is_mobile_screen && <SessionStatus/> }
+    <Box pos="relative" top={-3} c="red.1">
+      { !gctx.is_mobile_screen && <SessionStatus text_color="red.1"/> }
     </Box>
   </Group>
 }

@@ -7,7 +7,7 @@ export type AppSession = {
     name: string
     email: string | null
     image: string | null
-    is_super_user: boolean
+    is_superuser: boolean
   }
 }
 

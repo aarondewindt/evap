@@ -25,14 +25,14 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  sessions      Session[]
-  
+  sessions      Session[]  
   volunteer     Volunteer?
 
-  is_super_user Boolean @default(false)
+  is_superuser  Boolean @default(false)
+  is_verified   Boolean @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
  
 model Account {
@@ -48,10 +48,10 @@ model Account {
   id_token          String?
   session_state     String?
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
  
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([provider, providerAccountId])
 }
@@ -62,8 +62,8 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
  
 model VerificationToken {
@@ -87,94 +87,94 @@ model Event {
   start_datetime    DateTime
   end_datetime      DateTime
 
-  localtion_id      String
-  location          Location        @relation(fields: [localtion_id], references: [id])
+  location_id       String?
+  location          Location?        @relation(fields: [location_id], references: [id])
 
-  activities  EventActivity[]
-  tasks       EventTask[]
+  activities        EventActivity[]
+  tasks             EventTask[]
 }
 
 
 model Volunteer {
-  id            String          @id @default(cuid())
-  name          String
+  id                   String          @id @default(cuid())
+  name                 String
 
-  user_id       String?         @unique
-  user          User?           @relation(fields: [user_id], references: [id])
+  user_id              String?         @unique
+  user                 User?           @relation(fields: [user_id], references: [id])
 
-  notes         String?
+  notes                String?
 
-  availability_slots        VolunteerAvailabilitySlot[]
-  event_tasks               VolunteerEventTask[]
+  availability_slots   VolunteerAvailabilitySlot[]
+  event_tasks          VolunteerEventTask[]
 }
 
 
 model VolunteerAvailabilitySlot {
-  id            String          @id @default(cuid())
-  volunteer_id  String
-  start_datetime DateTime
-  end_datetime  DateTime
+  id               String          @id @default(cuid())
+  volunteer_id     String
+  start_datetime   DateTime
+  end_datetime     DateTime
 
-  volunteer     Volunteer       @relation(fields: [volunteer_id], references: [id])
+  volunteer        Volunteer       @relation(fields: [volunteer_id], references: [id])
 }
 
 
 model EventActivity {
-  id            String          @id @default(cuid())
-  event_id      String
-  name          String
-  description   String
-  start_datetime DateTime
-  end_datetime  DateTime
-  notes         String?
-
-  location_id   String
-  location      Location        @relation(fields: [location_id], references: [id])
-
-  event         Event           @relation(fields: [event_id], references: [id])
+  id               String          @id @default(cuid())
+  event_id         String
+  name             String
+  description      String
+  start_datetime   DateTime
+  end_datetime     DateTime
+  notes            String?
+ 
+  location_id      String?
+  location         Location?        @relation(fields: [location_id], references: [id])
+ 
+  event            Event           @relation(fields: [event_id], references: [id])
 }
 
 
 model EventTask {
-  id            String          @id @default(cuid())
-  event_id      String
-  name          String
-  description   String
-  start_datetime DateTime
-  end_datetime  DateTime
-  notes         String?
+  id              String          @id @default(cuid())
+  event_id        String
+  name            String
+  description     String
+  start_datetime  DateTime
+  end_datetime    DateTime
+  notes           String?
 
-  location_id   String
-  location      Location        @relation(fields: [location_id], references: [id])
+  location_id     String?
+  location        Location?        @relation(fields: [location_id], references: [id])
 
-  event         Event           @relation(fields: [event_id], references: [id])
-  volunteers    VolunteerEventTask[]
+  event           Event           @relation(fields: [event_id], references: [id])
+  volunteers      VolunteerEventTask[]
 }
 
 
 model VolunteerEventTask {
-  id            String          @id @default(cuid())
-  volunteer_id  String
-  event_task_id String
-  start_datetime DateTime
-  end_datetime  DateTime
+  id              String          @id @default(cuid())
+  volunteer_id    String
+  event_task_id   String
+  start_datetime  DateTime
+  end_datetime    DateTime
 
-  volunteer     Volunteer       @relation(fields: [volunteer_id], references: [id])
-  event_task    EventTask       @relation(fields: [event_task_id], references: [id])
+  volunteer       Volunteer       @relation(fields: [volunteer_id], references: [id])
+  event_task      EventTask       @relation(fields: [event_task_id], references: [id])
 }
 
 
 model Location {
-  id            String          @id @default(cuid())
-  name          String
-  description   String
-  address       String
-  maps_url      String 
-  notes         String?
+  id                 String          @id @default(cuid())
+  name               String
+  description        String
+  address            String
+  maps_url           String 
+  notes              String?
 
-  events        Event[]
-  event_activities EventActivity[]
-  event_tasks  EventTask[]
+  events             Event[]
+  event_activities   EventActivity[]
+  event_tasks        EventTask[]
 
 }
 
