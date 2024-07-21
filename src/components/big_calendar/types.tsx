@@ -1,6 +1,17 @@
+import { MantineColor } from '@mantine/core';
 import type { ReactNode } from 'react'
 import { Calendar, dayjsLocalizer, Event, CalendarProps, View } from 'react-big-calendar'
 import withDragAndDrop, { withDragAndDropProps } from 'react-big-calendar/lib/addons/dragAndDrop'
+
+
+export type BigCalendarEvent = {
+  allDay?: boolean | undefined;
+  title?: React.ReactNode | undefined;
+  start?: Date | undefined;
+  end?: Date | undefined;
+  color?: MantineColor | undefined;
+  resource: object;
+}
 
 
 export type CalendarState = {
@@ -9,21 +20,23 @@ export type CalendarState = {
 }
 
 
-export type BigCalendarProps<TEvent extends object, TResource extends object> = {
+export type BigCalendarProps<TEvent extends BigCalendarEvent> = {
   expand_height: boolean
-  calendar_props?: Omit<withDragAndDropProps<TEvent, TResource> & CalendarProps<TEvent, TResource>, "localizer">
+  onEventDelete?: (event: TEvent) => void
+  calendar_props?: Omit<withDragAndDropProps<TEvent, BigCalendarEvent['resource']> & CalendarProps<TEvent, BigCalendarEvent['resource']>, "localizer">
 }
 
-export type Memory<TEvent extends object, TResource extends object> = { 
+export type Memory<TEvent extends object> = { 
   view: View
   date: Date
+  selected: TEvent | null
 }
 
 export type Injected = { bar?: string }
 
-export interface State<TEvent extends object, TResource extends object> {
-  props: BigCalendarProps<TEvent, TResource>
-  memory: Memory<TEvent, TResource>
+export interface State<TEvent extends BigCalendarEvent> {
+  props: BigCalendarProps<TEvent>
+  memory: Memory<TEvent>
   injected: Injected
 }
 

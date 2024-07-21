@@ -86,7 +86,6 @@ export const useActions = (
   }, [ set_state])
 
   const on_calender_select_event = useCallback((calendar_event: RbcEvent) => {
-    console.log("on_calender_select_event", calendar_event)
     set_state((draft) => {
       draft.memory.selected_slot_id = calendar_event.resource.id as string
     })
@@ -106,7 +105,6 @@ export const useActions = (
   }, [ set_state ])
 
   const on_calendar_double_click = useCallback((calendar_event: RbcEvent) => {
-    console.log("on_calendar_double_click", calendar_event)
     set_state((draft) => {
       if (!draft.memory.edit) return
       const slot_id = calendar_event.resource.id as string

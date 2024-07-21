@@ -1,7 +1,7 @@
 "use client"
 
 import { darken, getThemeColor, isLightColor, lighten, luminance, MantineColor, useMantineTheme } from "@mantine/core"
-import type { BigCalendarProps } from "./types"
+import type { BigCalendarEvent, BigCalendarProps } from "./types"
 import { useBigCalendarContext } from "./context"
 import { ExpandHeight } from "@/utils/expand_height"
 import { CSSProperties, Fragment, useCallback } from "react"
@@ -20,19 +20,9 @@ import moment from 'moment'
 
 export const localizer = momentLocalizer(moment)
 
-
-export type BigCalendarEvent = {
-  allDay?: boolean | undefined;
-  title?: React.ReactNode | undefined;
-  start?: Date | undefined;
-  end?: Date | undefined;
-  color?: MantineColor | undefined;
-  resource: object;
-}
-
 const DnDCalendar = withDragAndDrop(Calendar)
 
-export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(props: BigCalendarProps<TEvent, TEvent['resource']>) => {
+export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(props: BigCalendarProps<TEvent>) => {
   const TypedDnDCalendar = DnDCalendar as unknown as ReturnType<typeof withDragAndDrop<TEvent, TEvent['resource']>>
   const ctx = useBigCalendarContext(props)
   const theme = useMantineTheme();
@@ -68,6 +58,8 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
 
       eventPropGetter={event_prop_getter}
       showMultiDayTimes
+
+      onKeyPressEvent={ctx.on_key_press_event}
 
       {...ctx.calender_props}
       {...calendar_props}

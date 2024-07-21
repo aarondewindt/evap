@@ -1,16 +1,16 @@
-import { useCallback } from "react"
+import { SyntheticEvent, useCallback } from "react"
 import { useSelectors } from "./selectors"
-import { State } from "./types"
+import { BigCalendarEvent, State } from "./types"
 import { Draft } from "immer"
 import { useInject } from "./inject"
 import { View } from "react-big-calendar"
 
 
-export const useActions = <TEvent extends object, TResource extends object>(
-      state: State<TEvent, TResource>,
-      s: ReturnType<typeof useSelectors<TEvent, TResource>>,
-      a: ReturnType<typeof useInject<TEvent, TResource>>['injected_actions'],
-      set_state: (recipe: (draft: Draft<State<TEvent, TResource>>)=>void)=>void) => {
+export const useActions = <TEvent extends BigCalendarEvent>(
+      state: State<TEvent>,
+      s: ReturnType<typeof useSelectors<TEvent>>,
+      a: ReturnType<typeof useInject<TEvent>>['injected_actions'],
+      set_state: (recipe: (draft: Draft<State<TEvent>>)=>void)=>void) => {
   
   const on_calendar_navigate = useCallback((date: Date) => {
     set_state((draft) => {
@@ -24,8 +24,33 @@ export const useActions = <TEvent extends object, TResource extends object>(
     })
   }, [ set_state ])
 
+  const on_selecting = useCallback((event: TEvent | null) => {
+    set_state((draft) => {
+      draft.memory.selected = event as Draft<TEvent>
+    })
+  }, [ set_state ])
+
+  const on_key_press_event = useCallback((event: TEvent, e: SyntheticEvent<HTMLElement, Event>) => {
+    if (e.type === "keydown") {
+      switch ((e as unknown as KeyboardEvent).key) {
+        case "Delete":
+          if (state.props.onEventDelete) {
+            state.props.onEventDelete?.(event)
+            return
+          }
+        default:
+          break
+      }
+    }
+
+    state.props.calendar_props?.onKeyPressEvent?.(event, e)
+
+  }, [ state.props ])
+
   return {
     on_calendar_navigate,
     on_calendar_view_change,
+    on_selecting,
+    on_key_press_event
   }
 }

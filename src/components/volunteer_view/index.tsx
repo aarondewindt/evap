@@ -151,6 +151,8 @@ const VolunteerViewInner = ({}: {}) => {
       <BigCalendar<CalendarEvent> 
         expand_height
         
+        onEventDelete={ctx.on_calendar_double_click}
+
         calendar_props={{
           popup: true,
           draggableAccessor: draggable_accessor,
