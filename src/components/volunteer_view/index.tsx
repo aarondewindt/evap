@@ -39,12 +39,12 @@ const VolunteerViewInner = ({}: {}) => {
   const show_help_modal = useCallback(() => {
     modals.open({
       title: <>
-        Thanks for volunteering for SoWee 2024!!
+        Welcome SoWee 2024 volunteer!!
       </>,
       children: <>
         <Text>
-          On this page you can fill in your availability and eventually view your schedule. Feel free to leave any notes for the 
-          SoWee comittee here or contact us through the Whatsapp group if you have any questions.
+          You can fill in your availability and eventually view your schedule on this page. Feel free to leave any notes for the 
+          SoWee comittee or contact us through the Whatsapp group if you have any questions.
         </Text>
         <Text mt="sm">
           To edit your availability:
@@ -71,18 +71,19 @@ const VolunteerViewInner = ({}: {}) => {
       size: "xl",
     })
   }, [ ctx.edit_deadline ])
-
-  const gvs_is_success = ctx.global_volunteer_settings?.isSuccess
   
   useDidUpdate(() => {
-    if (gvs_is_success) {
-      ctx.on_global_volunteer_settings_loaded()
+    if (ctx.global_volunteer_settings?.isSuccess) {
+      ctx.on_change_date_and_view(
+        ctx.global_volunteer_settings.data?.default_calendar_date || null,
+        ctx.global_volunteer_settings.data?.default_calendar_view || null,
+      )
       if (!ctx.help_msg_shown_before) {
         show_help_modal()
         ctx.on_help_msg_shown()
       }
     }   
-  }, [ gvs_is_success ])
+  }, [ ctx.global_volunteer_settings?.isSuccess ])
 
   const draggable_accessor = useCallback((event: CalendarEvent) => ctx.is_editing, [ ctx.is_editing ])
 
@@ -105,6 +106,9 @@ const VolunteerViewInner = ({}: {}) => {
       borderColor: theme.colors.primary[1],
     }}
   }, [ theme.colors.primary ]) as SlotGroupPropGetter  // There is a bug in the type definition
+
+
+  if (!ctx.global_volunteer_settings?.isSuccess) return <></>
 
   return <>
     <Toolbar

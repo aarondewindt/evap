@@ -139,10 +139,10 @@ export const useActions = (
     })
   }, [ set_state ])
 
-  const on_global_volunteer_settings_loaded = useCallback(() => {
+  const on_change_date_and_view = useCallback((date: Date | null, view: View | null) => {
     set_state((draft) => {
-      draft.memory.calendar_date = draft.injected.global_volunteer_settings?.data?.default_calendar_date ?? draft.memory.calendar_date
-      draft.memory.calendar_view = draft.injected.global_volunteer_settings?.data?.default_calendar_view ?? draft.memory.calendar_view
+      draft.memory.calendar_date = date ?? draft.memory.calendar_date
+      draft.memory.calendar_view = view ?? draft.memory.calendar_view
     })
   }, [ set_state ])
 
@@ -159,7 +159,7 @@ export const useActions = (
     on_calender_select_slot,
     on_calendar_double_click,
     on_calendar_event_edit,
-    on_global_volunteer_settings_loaded,
+    on_change_date_and_view: on_change_date_and_view,
     on_help_msg_shown: () => a.set_help_msg_shown_before(true),
   }
 }

@@ -6,6 +6,7 @@ import { useCheckPermissions } from "@/server_actions/session/hooks"
 import { permissions } from "@/server_actions/session/types"
 import { useLocalStorage } from "@mantine/hooks"
 import { useGlobalVolunteerSettings } from "@/server_actions/global_volunteer_settings/hooks"
+import { useNProgress } from "@/utils/use_nprogress"
 
 
 export const useInject = (state: State, s: Selectors) => {
@@ -21,6 +22,8 @@ export const useInject = (state: State, s: Selectors) => {
     global_volunteer_settings: useGlobalVolunteerSettings(),
     help_msg_shown_before
   })
+
+  useNProgress(s.sel_is_fetching(state_1))
 
   return {
     state: state_1,

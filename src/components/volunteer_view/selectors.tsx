@@ -152,6 +152,15 @@ export const useSelectors = ()=> {
 
     const sel_have_calendar_settings_been_set = (state: State) => state.memory.calendar_settings_set
 
+    const sel_is_fetching = createSelector(
+      (state: State) => state.injected.volunteers_query,
+      (state: State) => state.injected.global_volunteer_settings,
+      (state: State) => state.injected.cud_volunteers_mutation,
+      (q1, q2, m1) => {
+        return q1?.isFetching || q2?.isFetching || m1?.isPending || false
+      }
+    )
+
     return {
       sel_volunteer_id,
       sel_has_edit_permission,
@@ -168,7 +177,8 @@ export const useSelectors = ()=> {
       sel_edit_deadline,
       sel_has_deadline_passed,
       sel_global_volunteer_settings,
-      sel_have_calendar_settings_been_set
+      sel_have_calendar_settings_been_set,
+      sel_is_fetching,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }
