@@ -52,7 +52,7 @@ const VolunteerViewInner = ({}: {}) => {
         <List>
           <List.Item>Start by clicking the edit button.</List.Item>
           <List.Item>Click and drag on the calendar to mark time slots as available.</List.Item>
-          <List.Item>If you're on a touchscreen, longpress before dragging.</List.Item>
+          <List.Item>If you&apos;re on a touchscreen, longpress before dragging.</List.Item>
           <List.Item>Double click slots to delete them.</List.Item>
           <List.Item>And remember to save when you are done editing!!</List.Item>
         </List>
