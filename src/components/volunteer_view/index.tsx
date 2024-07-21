@@ -1,12 +1,12 @@
 "use client"
 
-import { Box, Button, List, Paper, Stack, Text, TextInput, Title } from "@mantine/core"
+import { Box, Button, List, Paper, Stack, Text, TextInput, Title, useMantineTheme } from "@mantine/core"
 import type { CalendarEvent, VolunteerViewProps } from "./types"
 import { VolunteerViewProvider, useVolunteerViewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { IconCancel, IconDeviceFloppy, IconEdit, IconHelp } from "@tabler/icons-react"
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
-import { Calendar, Views } from "react-big-calendar"
+import { Calendar, SlotGroupPropGetter, Views } from "react-big-calendar"
 import { localizer, DnDCalendar } from "@/calendar_localizer"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { ExpandHeight } from "@/utils/expand_height"
@@ -27,17 +27,23 @@ export const VolunteerView = (props: VolunteerViewProps) => {
   </VolunteerViewProvider>
 }
 
+
+const owee_start = new Date(2024, 7, 18)
+const owee_end = new Date(2024, 7, 22, 23, 59, 59)
+
+
 const VolunteerViewInner = ({}: {}) => {
   const ctx = useVolunteerViewContext()
+  const theme = useMantineTheme()
 
-  const show_help_modal = () => {
+  const show_help_modal = useCallback(() => {
     modals.open({
       title: <>
         Thanks for volunteering for SoWee 2024!!
       </>,
       children: <>
         <Text>
-          On this page you can edit your availability and eventually view your schedule. Feel free to leave any notes for the 
+          On this page you can fill in your availability and eventually view your schedule. Feel free to leave any notes for the 
           SoWee comittee here or contact us through the Whatsapp group if you have any questions.
         </Text>
         <Text mt="sm">
@@ -64,13 +70,12 @@ const VolunteerViewInner = ({}: {}) => {
       </>,
       size: "xl",
     })
-  }
+  }, [ ctx.edit_deadline ])
 
   const gvs_is_success = ctx.global_volunteer_settings?.isSuccess
   
   useDidUpdate(() => {
     if (gvs_is_success) {
-      console.log("gvs_is_success")
       ctx.on_global_volunteer_settings_loaded()
       if (!ctx.help_msg_shown_before) {
         show_help_modal()
@@ -78,6 +83,28 @@ const VolunteerViewInner = ({}: {}) => {
       }
     }   
   }, [ gvs_is_success ])
+
+  const draggable_accessor = useCallback((event: CalendarEvent) => ctx.is_editing, [ ctx.is_editing ])
+
+  const day_prop_getter = useCallback((date: Date) => {
+    const bg = date >= owee_start && date <= owee_end ? theme.colors.blue[0] : undefined
+    return { style: { backgroundColor: bg } }
+  }, [ theme.colors.blue ])
+
+  const slotPropGetter = useCallback((date: Date) => {
+    if (!(date >= owee_start && date <= owee_end)) return {}
+    return { style: { 
+      backgroundColor: theme.colors.primary[0],
+      borderColor: theme.colors.primary[1],
+    }}
+  }, [ theme.colors.primary ])
+
+  const slotGroupPropGetter = useCallback((group: Date[]) => {            
+    if (group.every((date) => !(date >= owee_start && date <= owee_end))) return {}
+    return { style: {
+      borderColor: theme.colors.primary[1],
+    }}
+  }, [ theme.colors.primary ]) as SlotGroupPropGetter  // There is a bug in the type definition
 
   return <>
     <Toolbar
@@ -117,14 +144,16 @@ const VolunteerViewInner = ({}: {}) => {
       
       <RichText value={ctx.notes} label="Notes" editor_enabled={ctx.is_editing} onChange={ctx.on_notes_change}/>
 
-
+      <Text>
+        Please make sure your availability between the 18th and 22nd of August is up to date before the deadline.
+      </Text>
 
       <BigCalendar<CalendarEvent> 
         expand_height
         
         calendar_props={{
           popup: true,
-          draggableAccessor: (event) => ctx.is_editing,
+          draggableAccessor: draggable_accessor,
           onSelectEvent: ctx.on_calender_select_event,
           onSelectSlot: ctx.on_calender_select_slot,
           onDoubleClickEvent: ctx.on_calendar_double_click,
@@ -133,7 +162,12 @@ const VolunteerViewInner = ({}: {}) => {
           onView: ctx.on_calendar_view_change,
           onNavigate: ctx.on_calendar_navidate,
 
-          ...ctx.calender_props
+          dayPropGetter: day_prop_getter,
+          slotPropGetter,
+          slotGroupPropGetter,
+
+
+          ...ctx.calender_props,
         }}
       />
 

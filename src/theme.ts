@@ -1,4 +1,4 @@
-import { TextInput, ActionIcon, NumberInput, Loader, Overlay, MultiSelect, createTheme, Select, Autocomplete, PillsInput } from '@mantine/core';
+import { TextInput, ActionIcon, NumberInput, Loader, Overlay, MultiSelect, createTheme, Select, Autocomplete, PillsInput, virtualColor } from '@mantine/core';
 import contained_input_classes from "@/styles/contained_input.module.css"
 import { DateTimePicker } from '@mantine/dates';
 
@@ -17,6 +17,14 @@ export const theme = createTheme({
   
   black: "#2C2E33",
   white: "#f8f9fa",
+
+  colors: {
+    primary: virtualColor({
+      name: "primary",
+      dark: "blue",
+      light: "blue",
+    })
+  },
 
   components: {
     Loader: Loader.extend({

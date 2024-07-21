@@ -78,7 +78,8 @@ export const useSelectors = ()=> {
           title: "Available",
           start: slot.start_datetime,
           end: slot.end_datetime,
-          resource: slot
+          resource: slot,
+          color: "green"
         })) || []
     })
 

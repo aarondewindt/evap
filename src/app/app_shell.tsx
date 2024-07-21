@@ -23,7 +23,7 @@ export function EvapAppShell({ children }: AppShellProps) {
         }}
         padding={0}
       >
-        <AppShell.Header style={{backgroundColor: "var(--mantine-color-red-6)"}}>
+        <AppShell.Header style={{backgroundColor: "var(--mantine-primary-color-6)"}}>
           <Header/>
         </AppShell.Header>
         <AppShell.Navbar>
