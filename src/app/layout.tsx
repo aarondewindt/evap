@@ -7,10 +7,11 @@ import { EvapAppShell } from './app_shell';
 import { GlobalStateProvider } from './global_state';
 import { ClientLayout } from './client_layout';
 import { theme } from '@/theme';
+import { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Event planner',
-  description: "Aaron's event planner",
+  description: "Aaron's event planner"
 };
 
 export default function RootLayout({
