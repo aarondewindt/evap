@@ -8,7 +8,7 @@ export const Header = () => {
 
   return <Group justify="space-between" h="100%" px="md">
     <Group>
-      <Burger opened={gctx.is_nav_open} hiddenFrom='sm' size="sm" onClick={gctx.on_nav_toggle} color="primary.1"/>
+      <Burger opened={gctx.is_nav_open} hiddenFrom='sm' size="sm" onClick={() => gctx.on_nav_toggle()} color="primary.1"/>
       <Text size="xl" fw={700} c="primary.0">SoWee Event planner</Text>
     </Group>
     <Box pos="relative" top={-3} c="primary.0">

@@ -3,6 +3,7 @@ import { AppShell, Burger, Group, Skeleton } from '@mantine/core';
 import { useGlobalStateContext } from "./global_state"
 import { Navbar } from '@/components/navbar';
 import { Header } from '@/components/header';
+import { useEffect } from 'react';
 
 
 type AppShellProps = {
@@ -13,6 +14,10 @@ type AppShellProps = {
 export function EvapAppShell({ children }: AppShellProps) {
   const gctx = useGlobalStateContext()
 
+  useEffect(() => {
+
+  }, [ gctx.path_name, gctx.search_params ])
+  
   return (
       <AppShell
         header={{ height: 45 }}
