@@ -23,6 +23,8 @@ export type Memory = {
     deleted_availability_slots: string[]
   } | null
 
+  optimistic: VolunteerInfo | null
+
   calendar_date: Date
   calendar_view: View
   calendar_settings_set: boolean
@@ -49,6 +51,7 @@ export interface State {
 
 export const init_memory: Memory = { 
   edit: null,
+  optimistic: null,
   calendar_date: new Date(),
   calendar_view: 'week',
   selected_slot_id: null,

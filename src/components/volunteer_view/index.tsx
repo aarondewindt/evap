@@ -8,7 +8,7 @@ import { IconCancel, IconDeviceFloppy, IconEdit, IconHelp } from "@tabler/icons-
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
 import { Calendar, SlotGroupPropGetter, Views } from "react-big-calendar"
 import { localizer, DnDCalendar } from "@/calendar_localizer"
-import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
+import { EditDoneToolbarButton, EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
 import { ExpandHeight } from "@/utils/expand_height"
 import { BigCalendar } from "../big_calendar"
 import { RichText } from "../rich_text"
@@ -54,7 +54,7 @@ const VolunteerViewInner = ({}: {}) => {
           <List.Item>Click and drag on the calendar to mark time slots as available.</List.Item>
           <List.Item>If you&apos;re on a touchscreen, longpress before dragging.</List.Item>
           <List.Item>Double click slots to delete them.</List.Item>
-          <List.Item>And remember to save when you are done editing!!</List.Item>
+          <List.Item>Changes are saved automatically</List.Item>
         </List>
         { ctx.edit_deadline && 
           <Box mt="sm">
@@ -113,12 +113,20 @@ const VolunteerViewInner = ({}: {}) => {
 
   return <>
     <Toolbar
-      left={<EditSaveCancelToolbarButton
+      // left={<EditSaveCancelToolbarButton
+      //   is_editing={ctx.is_editing}
+      //   readonly={!ctx.has_edit_permission || ctx.has_deadline_passed}
+      //   onEdit={ctx.on_enable_editing}
+      //   onSave={ctx.on_save}
+      //   onCancel={ctx.on_cancel_editing}
+      // />}
+
+      left={<EditDoneToolbarButton
         is_editing={ctx.is_editing}
         readonly={!ctx.has_edit_permission || ctx.has_deadline_passed}
         onEdit={ctx.on_enable_editing}
-        onSave={ctx.on_save}
-        onCancel={ctx.on_cancel_editing}
+        onDone={ctx.on_cancel_editing}
+        done_label="Finish editing"
       />}
 
       center={<>{

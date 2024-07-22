@@ -108,6 +108,9 @@ model Volunteer {
   availability_slots   VolunteerAvailabilitySlot[]
   event_tasks          VolunteerEventTask[]
   deadline_exceptions  GlobalVolunteerSettingsDeadlineException[]
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 

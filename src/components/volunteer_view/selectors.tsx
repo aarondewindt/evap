@@ -31,6 +31,26 @@ export const useSelectors = ()=> {
       (query): VolunteerInfo | null => query?.data?.[0] as VolunteerInfo || null
     )
 
+    const sel_volunteer_optimistic = (state: State) => state.memory.optimistic
+
+    const sel_unedited_volunteer = createSelector(
+      sel_volunteer_query,
+      sel_volunteer_optimistic,
+      (from_query, optimistic): VolunteerInfo | null => {
+        if (!optimistic?.updated_at) return from_query
+        if (!from_query?.updated_at) return null
+        console.log("sel_unedited_volunteer", {
+          optimistic_chosen: optimistic.updated_at >= from_query.updated_at,
+          optimistic_updated_at: optimistic.updated_at,
+          from_query_updated_at: from_query.updated_at
+        })
+        if (optimistic.updated_at >= from_query.updated_at) 
+          return optimistic
+        else 
+          return from_query
+      }
+    )
+
     const sel_edit = (state: State) => state.memory.edit
     const sel_volunteer_edit = (state: State) => state.memory.edit?.volunteer
 
@@ -41,8 +61,8 @@ export const useSelectors = ()=> {
 
     const sel_volunteer = createSelector(
       sel_volunteer_edit,
-      sel_volunteer_query,
-      (volunteer_edit, volunteer_query) => volunteer_edit || volunteer_query
+      sel_unedited_volunteer,
+      (volunteer_edit, unedited_volunteer) => volunteer_edit || unedited_volunteer
     )
 
     const sel_name_input_props = createSelector(
@@ -56,7 +76,7 @@ export const useSelectors = ()=> {
 
     const sel_availability_slots = createSelector(
       sel_edit,
-      sel_volunteer_query,
+      sel_unedited_volunteer,
       (edit, volunteer_query) => {
         if (!volunteer_query?.availability_slots) return []
         if (!edit) return volunteer_query.availability_slots
@@ -101,7 +121,7 @@ export const useSelectors = ()=> {
     })
 
     const sel_on_save_args = createSelector(
-      sel_volunteer_query,
+      sel_unedited_volunteer,
       sel_edit,
       (volunteer_query, edit): CUDVolunteersArgs | null => {
         if (!volunteer_query) return null
@@ -110,7 +130,8 @@ export const useSelectors = ()=> {
           update: [{
             where: { id: volunteer_query.id },
             data: {
-              ..._.omit(edit.volunteer, "availability_slots"),
+              // ..._.omit(edit.volunteer, "availability_slots", "user_id", "created_at", "updated_at"),
+              ..._.pick(edit.volunteer, "name", "notes"),
               availability_slots: {            
                 deleteMany: edit.deleted_availability_slots.map((id) => ({ id })),
                 create: edit.new_availability_slots.map(slot => _.omit(slot, "id", "volunteer_id")),
@@ -122,6 +143,21 @@ export const useSelectors = ()=> {
               }
             }
           }],
+        }
+      }
+    )
+
+    const sel_volunteer_with_edits = createSelector(
+      sel_unedited_volunteer,
+      sel_edit,
+      sel_availability_slots,
+      (unedited_volunteer, edit, availability_slots): VolunteerInfo | null => {
+        if (!unedited_volunteer) return null
+        if (!edit) return null
+        return {
+          ...unedited_volunteer,
+          ..._.pick(edit.volunteer, "name", "notes"),
+          availability_slots: availability_slots
         }
       }
     )
@@ -179,6 +215,7 @@ export const useSelectors = ()=> {
       sel_global_volunteer_settings,
       sel_have_calendar_settings_been_set,
       sel_is_fetching,
+      sel_volunteer_with_edits,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

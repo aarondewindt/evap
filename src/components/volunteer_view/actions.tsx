@@ -4,6 +4,8 @@ import { State } from "./types"
 import { Draft } from "immer"
 import { useInject } from "./inject"
 import { View, Event as RbcEvent } from "react-big-calendar"
+import { useDebouncedCallback } from "@mantine/hooks"
+import _ from "lodash"
 
 
 export const useActions = (
@@ -14,8 +16,8 @@ export const useActions = (
   
   const { cud_volunteers } = a
 
-  const ref = useRef({ set_state })
-  useEffect(() => { ref.current = { set_state } }, [ set_state ])
+  const ref = useRef({ set_state, s, state, a })
+  useEffect(() => { ref.current = { set_state, s, state, a } }, [ set_state, s, state, a ])
 
   // const ref = useRef({ state, s, a, set_state })
   // useEffect(() => { ref.current = { state, s, a, set_state } }, [ state, s, a, set_state ])
@@ -39,7 +41,8 @@ export const useActions = (
     })
   }, [ set_state ])
 
-  const on_save = useCallback(async () => {
+  const on_save = useCallback(async (keep_editing: boolean = false) => {
+    const { set_state, s, state, a } = ref.current
     const is_editing = s.sel_is_editing(state)
     if (!is_editing) return
 
@@ -47,14 +50,35 @@ export const useActions = (
     if (!volunteer) return
     
     const update_args = s.sel_on_save_args(state)
-    if (update_args) {
-      await cud_volunteers(update_args)
+    const volunteer_with_edits = _.cloneDeep(s.sel_volunteer_with_edits(state))
+
+    console.log("on_save", { volunteer, volunteer_with_edits, update_args })
+
+    if (!keep_editing) {
+      set_state((draft) => {
+        draft.memory.edit = null
+        draft.memory.optimistic = volunteer_with_edits
+      })
+    } else {
+      set_state((draft) => {
+        draft.memory.optimistic = volunteer_with_edits
+        // const volunteer = s.sel_volunteer(draft)
+        if (!volunteer_with_edits) return
+        draft.memory.edit = {
+          volunteer: volunteer_with_edits,
+          new_availability_slots: [],
+          updated_availability_slots: [],
+          deleted_availability_slots: []
+        }
+      })
     }
 
-    ref.current.set_state((draft) => {
-      draft.memory.edit = null
-    })
-  }, [ s, cud_volunteers, state ])
+    if (update_args) {
+      await a.cud_volunteers(update_args)
+    }    
+  }, [])
+
+  const on_save_debounced = useDebouncedCallback(on_save, 500)
 
   const on_name_change = useCallback((value: string) => {
     set_state((draft) => {
@@ -62,7 +86,8 @@ export const useActions = (
       if (!is_editing) return
       draft.memory.edit!.volunteer.name = value
     })
-  }, [ set_state, s ])
+    on_save_debounced(true)
+  }, [ set_state, s, on_save_debounced ])
 
   const on_notes_change = useCallback((value: string) => {
     set_state((draft) => {
@@ -70,7 +95,8 @@ export const useActions = (
       if (!is_editing) return
       draft.memory.edit!.volunteer.notes = value
     })
-  }, [ set_state, s ])
+    on_save_debounced(true)
+  }, [ set_state, s, on_save_debounced ])
 
   // Availabilty slots calendar
   const on_calendar_navidate = useCallback((date: Date) => {
@@ -102,7 +128,8 @@ export const useActions = (
         end_datetime: end
       })
     })
-  }, [ set_state ])
+    on_save_debounced(true)
+  }, [ set_state, on_save_debounced ])
 
   const on_calendar_double_click = useCallback((calendar_event: RbcEvent) => {
     set_state((draft) => {
@@ -114,7 +141,8 @@ export const useActions = (
         draft.memory.edit.deleted_availability_slots.push(slot_id)
       }
     })
-  }, [ set_state ])
+    on_save_debounced(true)
+  }, [ set_state, on_save_debounced ])
 
   const on_calendar_event_edit = useCallback(({ event, start, end}: { event: RbcEvent, start: string | Date, end: string | Date }) => {
     set_state((draft) => {
@@ -137,7 +165,8 @@ export const useActions = (
         })
       }
     })
-  }, [ set_state ])
+    on_save_debounced(true)
+  }, [ set_state, on_save_debounced ])
 
   const on_change_date_and_view = useCallback((date: Date | null, view: View | null) => {
     set_state((draft) => {
@@ -152,6 +181,7 @@ export const useActions = (
     on_name_change,
     on_notes_change,
     on_save,
+    on_save_debounced,
 
     on_calendar_navidate,
     on_calendar_view_change,

@@ -49,8 +49,8 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
     style={{ flexGrow: 1, minHeight: 600 }}
       localizer={localizer}
       // dayLayoutAlgorithm="no-overlap"
-      step={15}
-      timeslots={4}
+      step={30}
+      timeslots={2}
       popup
 
       onNavigate={ctx.on_calendar_navigate}
