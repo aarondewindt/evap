@@ -5,12 +5,15 @@ import { useMediaQuery } from "@mantine/hooks"
 import { useQuery } from "@tanstack/react-query"
 import { useUpdateEvents } from "@/server_actions/events/hooks"
 import { useSessionQuery } from "@/server_actions/session/hooks"
+import { usePathname, useSearchParams } from "next/navigation"
 
 
 export const useInject = (state: State, s: Selectors) => {
   const state_1 = useInjectValues(state, "injected", {
     is_mobile_screen: useMediaQuery('(max-width: 48em)'),
-    session: useSessionQuery()
+    session: useSessionQuery(),
+    path_name: usePathname(),
+    search_params: useSearchParams()
   })
 
   return {

@@ -1,4 +1,5 @@
 import { useSessionQuery } from '@/server_actions/session/hooks'
+import { ReadonlyURLSearchParams } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 export const local_storage_key = "evap_state"
@@ -14,6 +15,8 @@ export type LocalStorage = {
 export type Injected = {
   is_mobile_screen?: boolean
   session?: ReturnType<typeof useSessionQuery>
+  path_name?: string
+  search_params?: ReadonlyURLSearchParams
 }
 
 export interface GlobalStateProviderProps {

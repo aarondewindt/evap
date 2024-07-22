@@ -1,10 +1,10 @@
 import { ReactNode, useState, useEffect, useRef, useCallback, ComponentProps, forwardRef } from 'react';
-import { Center, Stack, Loader, Text, Accordion, Tabs, Group, Button, Grid, ButtonProps, createPolymorphicComponent, ActionIconProps, ActionIcon, Tooltip, Box, MenuProps, MenuTargetProps, MenuDropdownProps, Menu, rem, px, PopoverProps, PopoverTargetProps, PopoverDropdownProps, Popover, GroupProps, TextProps, DividerProps, Divider } from '@mantine/core';
+import { Center, Stack, Loader, Text, Accordion, Tabs, Group, Button, Grid, ButtonProps, createPolymorphicComponent, ActionIconProps, ActionIcon, Tooltip, Box, MenuProps, MenuTargetProps, MenuDropdownProps, Menu, rem, px, PopoverProps, PopoverTargetProps, PopoverDropdownProps, Popover, GroupProps, TextProps, DividerProps, Divider, ButtonVariant } from '@mantine/core';
 import _ from "lodash";
 import { IconChevronCompactDown, IconChevronDown } from '@tabler/icons-react';
 
 
-const BUTTON_VARIANT = "outline"
+const BUTTON_VARIANT: ButtonVariant = "light"
 
 export interface ToolbarProps {
   left?: ReactNode
@@ -56,7 +56,7 @@ export const Toolbar = ({left, center, right, children}: ToolbarProps) => {
   }
 
   return <Box bd="bottom"
-            style={{ background: "var(--mantine-color-gray-2)"}}
+            style={{ background: "var(--mantine-color-gray-1)"}}
             >
     <Group  p={2}
             gap={2}

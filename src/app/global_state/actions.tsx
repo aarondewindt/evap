@@ -11,11 +11,13 @@ export const useActions = (
       a: ReturnType<typeof useInject>['injected_actions'],
       set_state: (recipe: (draft: Draft<State>)=>void)=>void) => {
   
-  const on_nav_toggle = useCallback(() => {
-    console.log("nav toggle")
+  const on_nav_toggle = useCallback((open?: boolean) => {
     set_state((draft) => {
-      console.log("nav toggle")
-      draft.memory.is_nav_open = !draft.memory.is_nav_open
+      if (open !== undefined) {
+        draft.memory.is_nav_open = open
+      } else {
+        draft.memory.is_nav_open = !draft.memory.is_nav_open
+      }
     })
   }, [set_state])
 

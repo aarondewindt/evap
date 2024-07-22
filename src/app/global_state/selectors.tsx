@@ -20,12 +20,17 @@ export const useSelectors = ()=> {
       (session): boolean => !session?.authenticated
     )
 
+    const sel_path_name = (state: State) => state.injected.path_name
+    const sel_search_params = (state: State) => state.injected.path_name
+
     return {
       sel_is_nav_open,
       sel_is_mobile_screen,
       sel_session,
       sel_user_is_volunteer,
       sel_is_session_fetching,
+      sel_path_name,
+      sel_search_params,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

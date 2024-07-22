@@ -16,7 +16,7 @@ export const Navbar = () => {
       )}
     </Box>
     <Box p="md">
-      { gctx.is_mobile_screen && <SessionStatus text_color="red"/> }
+      { gctx.is_mobile_screen && <SessionStatus text_color="grey.9"/> }
     </Box>
     
   </Stack>

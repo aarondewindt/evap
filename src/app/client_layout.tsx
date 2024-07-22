@@ -18,7 +18,8 @@ import { NavigationProgress } from "@mantine/nprogress";
 import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from '@mantine/modals';
 import { theme } from "@/theme";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { NavigationEvents } from "./navigation_events";
 
 
 type ClientLayoutProps = {
@@ -36,6 +37,9 @@ export function ClientLayout({ children }: ClientLayoutProps) {
           <SessionProvider>
             <GlobalStateProvider>
               <NavigationProgress color='gray.0'/>
+              <Suspense fallback={null}>
+                <NavigationEvents/>
+              </Suspense>
               <NProgressProvider>
                 {children}
               </NProgressProvider>
