@@ -1,4 +1,4 @@
-import { useGetAllEvents } from '@/server_actions/events/hooks'
+import { useFindManyEvents } from '@/server_actions/events/hooks'
 import { Prisma } from '@prisma/client'
 import type { ReactNode } from 'react'
 import { View } from 'react-big-calendar'
@@ -13,7 +13,6 @@ export type EventCalendarSettings = {
   view: View
   date: Date
 }
-
 
 export type EventsOverviewProps = { 
   local_storage_key: string
@@ -33,7 +32,7 @@ export type LocalStorage = {
 }
 
 export type Injected = {
-  events_query?: ReturnType<typeof useGetAllEvents>
+  events_query?: ReturnType<typeof useFindManyEvents>
   has_edit_permission?: boolean | null
 }
 

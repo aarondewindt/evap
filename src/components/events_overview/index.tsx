@@ -9,6 +9,7 @@ import { DnDCalendar, localizer } from "@/calendar_localizer"
 import { ExpandHeight } from "@/utils/expand_height"
 import { BigCalendar } from "../big_calendar"
 import { Prisma } from "@/db"
+import { useCallback } from "react"
 
 
 export const EventsOverview = (props: EventsOverviewProps) => {
@@ -20,6 +21,8 @@ export const EventsOverview = (props: EventsOverviewProps) => {
 
 const EventsOverviewInner = ({}: {}) => {
   const ctx = useEventsOverviewContext()
+
+  const draggableAccessor = useCallback((event: CalendarEvent) => ctx.is_editing, [ ctx.is_editing ])
 
   return <>
     <Toolbar
@@ -37,12 +40,14 @@ const EventsOverviewInner = ({}: {}) => {
       
       calendar_props={{
         popup: true,
-        draggableAccessor: (event) => ctx.is_editing,
+        draggableAccessor,
         onSelectEvent: ctx.on_calender_select_event,
         onSelectSlot: ctx.on_calender_select_slot,
         onDoubleClickEvent: ctx.on_calendar_double_click,
         onEventDrop: ctx.on_calendar_event_edit,
         onEventResize: ctx.on_calendar_event_edit,
+        onNavigate: ctx.on_calendar_navigate,
+        onView: ctx.on_calendar_view_change,
 
         ...ctx.calender_props
       }}     

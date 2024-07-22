@@ -14,78 +14,6 @@ export type EventCreateManyArgs = Parameters<typeof prisma.event.createMany>[0]
 export type EventDeleteArgs = Parameters<typeof prisma.event.delete>[0]
 export type EventDeleteManyArgs = Parameters<typeof prisma.event.deleteMany>[0]
 
-export const get_all_event = async () => {
-  const events = await prisma.event.findMany()
-  return events
-}
-
-
-export const get_events_by_id = async (ids: string[]) => {
-  const events = await prisma.event.findMany({
-    where: {
-      id: {
-        in: ids
-      }
-    }
-  })
-  return events
-}
-
-
-export const find_many_events = async (args: EventFindManyArgs) => {
-  const events = await prisma.event.findMany(args)
-  return events
-}
-
-
-export const update_events = async (args: EventUpdateArgs[]) => {
-  const session = await get_session()
-  if (check_permission(session, [])) {
-    return []
-  }
-
-  return await Promise.all(
-    args.map(async (a) => {
-      return await prisma.event.update(a)
-    })
-  )
-}
-
-
-export const create_events = async (args: EventCreateArgs[]) => {
-  const session = await get_session()
-  if (check_permission(session, [])) {
-    return []
-  }
-
-  const created_events = await Promise.all(
-    args.map(async (a) => {
-      const created_event = await prisma.event.create(a)
-      return created_event
-    })
-  )
-  return created_events
-}
-
-
-export const delete_events = async (ids: string[]) => {
-  const session = await get_session()
-  if (check_permission(session, [])) {
-    return []
-  }
-  
-  const deleted_events = await prisma.event.deleteMany({
-    where: {
-      id: {
-        in: ids
-      }
-    }
-  })
-
-  return deleted_events
-}
-
-
 export type CUDEventsArgs = {
   create?: EventCreateArgs[],
   create_many?: EventCreateManyArgs[],
@@ -94,6 +22,12 @@ export type CUDEventsArgs = {
   delete_?: EventDeleteArgs[],
   delete_many?: EventDeleteManyArgs[]
 }
+
+export const find_many_events = async (args: EventFindManyArgs) => {
+  const events = await prisma.event.findMany(args)
+  return events
+}
+
 
 export const cud_events = async (args: CUDEventsArgs) => {
     const session = await get_session()

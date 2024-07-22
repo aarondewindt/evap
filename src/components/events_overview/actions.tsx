@@ -6,6 +6,7 @@ import { useInject } from "./inject"
 import { View, Event as RbcEvent } from "react-big-calendar"
 import { modals } from "@mantine/modals"
 import { Text } from "@mantine/core"
+import { useRouter } from "next/navigation"
 
 
 export const useActions = (
@@ -16,6 +17,7 @@ export const useActions = (
   
   const ref = useRef({ state, s, a, set_state })
   useEffect(() => { ref.current = { state, s, a, set_state } }, [ state, s, a, set_state ])
+  const router = useRouter()
 
   const on_enable_editing = useCallback(() => {
     set_state((draft) => {
@@ -82,7 +84,11 @@ export const useActions = (
   }, [ set_state ])
 
   const on_calendar_double_click = useCallback((event: RbcEvent) => {
-    if (!state.memory.edit) return
+    if (!state.memory.edit) {
+      router.push(`/events/${event.resource.id}`)
+      return
+    }
+    
     modals.openConfirmModal({
       title: 'Delete event',
       children: <Text>Are you sure you want to delete &apos;{event.title}&apos;?</Text>,

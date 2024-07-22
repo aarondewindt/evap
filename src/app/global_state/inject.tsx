@@ -2,8 +2,6 @@ import { useMemo } from "react"
 import { State } from "./types"
 import { Selectors } from "./selectors"
 import { useMediaQuery } from "@mantine/hooks"
-import { useQuery } from "@tanstack/react-query"
-import { useUpdateEvents } from "@/server_actions/events/hooks"
 import { useSessionQuery } from "@/server_actions/session/hooks"
 import { usePathname, useSearchParams } from "next/navigation"
 
