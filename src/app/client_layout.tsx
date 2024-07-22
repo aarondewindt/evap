@@ -35,15 +35,17 @@ export function ClientLayout({ children }: ClientLayoutProps) {
       <ModalsProvider>
         <QueryClientProvider client={queryClient}>
           <SessionProvider>
-            <GlobalStateProvider>
-              <NavigationProgress color='gray.0'/>
-              <Suspense fallback={null}>
-                <NavigationEvents/>
-              </Suspense>
-              <NProgressProvider>
-                {children}
-              </NProgressProvider>
-            </GlobalStateProvider>
+            <Suspense fallback={null}>
+              <GlobalStateProvider>
+                <NavigationProgress color='gray.0'/>
+                <Suspense fallback={null}>
+                  <NavigationEvents/>
+                </Suspense>
+                <NProgressProvider>
+                  {children}
+                </NProgressProvider>
+              </GlobalStateProvider>
+            </Suspense>
           </SessionProvider>
         </QueryClientProvider>
       </ModalsProvider>
