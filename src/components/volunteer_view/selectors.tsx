@@ -26,6 +26,8 @@ export const useSelectors = ()=> {
       })
     )
 
+    const sel_volunteer_q = (state: State) => state.injected.volunteers_query
+
     const sel_volunteer_query = createSelector(
       (state: State) => state.injected.volunteers_query,
       (query): VolunteerInfo | null => query?.data?.[0] as VolunteerInfo || null
@@ -216,6 +218,7 @@ export const useSelectors = ()=> {
       sel_have_calendar_settings_been_set,
       sel_is_fetching,
       sel_volunteer_with_edits,
+      sel_volunteer_q,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }
