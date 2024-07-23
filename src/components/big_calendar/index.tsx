@@ -49,8 +49,8 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
     style={{ flexGrow: 1, minHeight: 600 }}
       localizer={localizer}
       // dayLayoutAlgorithm="no-overlap"
-      step={30}
-      timeslots={2}
+      step={15}
+      timeslots={4}
       popup
 
       onNavigate={ctx.on_calendar_navigate}
@@ -60,6 +60,7 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
       showMultiDayTimes
 
       onKeyPressEvent={ctx.on_key_press_event}
+      onDoubleClickEvent={ctx.on_double_click}
 
       {...ctx.calender_props}
       {...calendar_props}

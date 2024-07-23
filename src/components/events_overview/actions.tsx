@@ -94,12 +94,12 @@ export const useActions = (
     }
     
     modals.openConfirmModal({
-      title: 'Delete event',
+      title: 'Delete event?',
       children: <Text>Are you sure you want to delete &apos;{event.title}&apos;?</Text>,
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
-        set_state((draft) => {
+        ref.current.set_state((draft) => {
           if (!draft.memory.edit) return
           const event_id = event.resource.id
           if (event_id.startsWith("new_")) {
@@ -111,7 +111,7 @@ export const useActions = (
         })
       }
     })    
-  }, [ set_state, state ])
+  }, [ state, router ])
 
 
   const on_calendar_event_edit = useCallback(({ event, start, end }: { event: RbcEvent, start: string | Date, end: string | Date }) => {

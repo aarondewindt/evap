@@ -1,5 +1,5 @@
 "use client"
-import { AppShell, Burger, Group, Skeleton } from '@mantine/core';
+import { AppShell, Box, Burger, Group, ScrollArea, Skeleton } from '@mantine/core';
 import { useGlobalStateContext } from "./global_state"
 import { Navbar } from '@/components/navbar';
 import { Header } from '@/components/header';
@@ -42,8 +42,12 @@ export function EvapAppShell({ children }: AppShellProps) {
         <AppShell.Navbar>
           <Navbar/>
         </AppShell.Navbar>
-        <AppShell.Aside id='app_shell_aside'>
-          
+        <AppShell.Aside>
+          <ScrollArea>
+            <Box id='app_shell_aside'>
+
+            </Box>
+          </ScrollArea>
         </AppShell.Aside>
         <AppShell.Main>
           {children}

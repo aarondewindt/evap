@@ -168,6 +168,8 @@ const VolunteerViewInner = ({}: {}) => {
 
         calendar_props={{
           popup: true,
+          step: 30,
+          timeslots: 2,
           draggableAccessor: draggable_accessor,
           onSelectEvent: ctx.on_calender_select_event,
           onSelectSlot: ctx.on_calender_select_slot,

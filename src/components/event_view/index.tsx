@@ -2,15 +2,16 @@
 
 
 import { Portal, Stack, Tabs, TextInput } from "@mantine/core"
-import type { EventViewAsideProps, EventViewProps } from "./types"
+import type { ActivityCEvent, EventViewAsideProps, EventViewProps } from "./types"
 import { EventViewProvider, useEventViewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
-import { ChangeEvent, useEffect } from "react"
+import { ChangeEvent, useCallback, useEffect } from "react"
 import { DateTimePicker, DateValue } from "@mantine/dates"
 import { RichText } from "../rich_text"
 import { useGlobalStateContext } from "@/app/global_state"
 import { IconX } from "@tabler/icons-react"
+import { BigCalendar } from "../big_calendar"
 
 
 export const EventView = (props: EventViewProps) => {
@@ -21,6 +22,9 @@ export const EventView = (props: EventViewProps) => {
 
 const EventViewInner = ({}: {}) => {
   const ctx = useEventViewContext()
+
+  if (!ctx.event) return <></>
+
   return <>
     <Toolbar
       left={<EditSaveCancelToolbarButton
@@ -44,8 +48,8 @@ const EventViewInner = ({}: {}) => {
         <Tabs.Tab value="general">
           General
         </Tabs.Tab>
-        <Tabs.Tab value="schedule">
-          Schedule
+        <Tabs.Tab value="activities">
+          Activities
         </Tabs.Tab>
         <Tabs.Tab value="tasks">
           Tasks
@@ -56,19 +60,15 @@ const EventViewInner = ({}: {}) => {
         <GeneralTab/>
       </Tabs.Panel>
 
-      <Tabs.Panel value="schedule">
-        Event Schedule
+      <Tabs.Panel value="activities">
+        <ActivitiesTab/>
       </Tabs.Panel>
 
-      <Tabs.Panel value="assignments">
+      <Tabs.Panel value="tasks">
         Volunteer tasks and assignments
       </Tabs.Panel>
     </Tabs>
-
-    
   </>
-  
-
 }
 
 
@@ -98,8 +98,6 @@ export const EventViewAside = ({ event_id, ...props}: EventViewAsideProps) => {
 const GeneralTab = () => {
   const ctx = useEventViewContext()
 
-  console.log("notes_props", ctx.notes_props)
-
   return <Stack p="sm">
     <TextInput 
       label="Name"
@@ -127,5 +125,36 @@ const GeneralTab = () => {
       onChange={(e: string) => { e && ctx.on_change_event_value("notes", e) }}
       label="Notes"
       {...ctx.notes_props}/>
+  </Stack>
+}
+
+
+const ActivitiesTab = () => {
+  const ctx = useEventViewContext()
+  const draggableAccessor = useCallback((event: ActivityCEvent) => ctx.is_editing, [ ctx.is_editing ])
+
+  console.log("ctx.event?.start_datetime", ctx.event?.start_datetime)
+
+  return <Stack p="sm">
+    aljkdnals
+
+    <BigCalendar<ActivityCEvent>
+      expand_height={true}
+      onEventDelete={ctx.on_activity_calendar_delete}
+
+      calendar_props={{
+        defaultDate: ctx.event?.start_datetime,
+        defaultView: "day",
+        draggableAccessor,
+        // onSelectEvent: ctx.on_calender_select_event,
+        onSelectSlot: ctx.on_activity_calender_select_slot,
+        onEventDrop: ctx.on_activity_calendar_event_edit,
+        onEventResize: ctx.on_activity_calendar_event_edit,
+        // onNavigate: ctx.on_calendar_navigate,
+        // onView: ctx.on_calendar_view_change,
+
+        ...ctx.activity_calender_props
+      }}
+    />
   </Stack>
 }

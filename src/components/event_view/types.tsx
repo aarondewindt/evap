@@ -1,6 +1,7 @@
 import { useCUDEvents, useFindManyEvents } from '@/server_actions/events/hooks'
 import { Prisma } from '@prisma/client'
 import type { ReactNode } from 'react'
+import { BigCalendarEvent } from '../big_calendar/types'
 
 
 
@@ -20,7 +21,8 @@ export const event_get_payload: {
 }
 
 export type EventInfo = Prisma.EventGetPayload<typeof event_get_payload>
-
+export type ActivityCEvent = BigCalendarEvent & { resource: EventInfo['activities'][0] }
+export type TasksCEvent = BigCalendarEvent & { resource: EventInfo['tasks'][0] }
 
 export type EventViewProps = { 
   event_id: string
@@ -34,6 +36,11 @@ export type EventViewAsideProps = Omit<EventViewProps, "event_id"> & {
 export type Memory = { 
   edit: {
     event: EventInfo
+    activities: {
+      new: EventInfo['activities']
+      updated: EventInfo['activities']
+      deleted: string[]
+    }
   } | null
 
 }

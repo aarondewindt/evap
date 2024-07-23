@@ -9,6 +9,7 @@ export const NavigationEvents = () => {
 
   useEffect(() => {
     gctx.on_nav_toggle(false)
+    gctx.on_aside_toggle(false)
   }, [ gctx.path_name, gctx.search_params ])
 
   return <></>

@@ -39,7 +39,6 @@ const EventsOverviewInner = ({}: {}) => {
       expand_height
       
       calendar_props={{
-        popup: true,
         draggableAccessor,
         onSelectEvent: ctx.on_calender_select_event,
         onSelectSlot: ctx.on_calender_select_slot,

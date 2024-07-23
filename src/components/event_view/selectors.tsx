@@ -2,13 +2,14 @@ import _, { create } from "lodash"
 import { useMemo } from "react"
 import { createSelector } from 'reselect'
 
-import { event_get_payload, EventInfo, type State } from "./types"
+import { ActivityCEvent, event_get_payload, EventInfo, type State } from "./types"
 import { TextInputProps } from "@mantine/core"
 import { DateTimePickerProps } from "@mantine/dates"
 import { RichTextProps } from "../rich_text"
 // import { EventFindManyArgs } from "@/server_actions/events/actions"
 import { prisma } from "@/db"
 import { CUDEventsArgs } from "@/server_actions/events/actions"
+import { BigCalendarProps } from "../big_calendar/types"
 
 
 export type EventFindManyArgs = Parameters<typeof prisma.event.findMany<typeof event_get_payload>>[0]
@@ -35,16 +36,35 @@ export const useSelectors = ()=> {
     const sel_is_editing = (state: State) => !!state.memory.edit
     const sel_edit = (state: State) => state.memory.edit
 
+    const sel_activities = createSelector(
+      sel_unedited_event,
+      sel_edit,
+      (unedited_event, edit): EventInfo['activities'] => {
+        if (!unedited_event) return []
+        if (!edit) return unedited_event.activities
+
+        return unedited_event.activities
+          .map(activity => {
+            const updated_activity = edit.activities.updated.find(a => a.id === activity.id)
+            if (updated_activity) return updated_activity
+            return activity
+          })
+          .filter(activity => !edit.activities.deleted.includes(activity.id))
+          .concat(edit.activities.new)
+    })
+
     const sel_event = createSelector(
       sel_unedited_event,
       sel_edit,
-      (unedited_event, edit): EventInfo | null => {
-
-        if (!unedited_event) return null
-        
+      sel_activities,
+      (unedited_event, edit, activities): EventInfo | null => {
+        if (!unedited_event) return null        
         if (!edit) return unedited_event
        
-        return edit.event
+        return {
+          ...edit.event,
+          activities
+        }
       }
     )
     
@@ -114,6 +134,26 @@ export const useSelectors = ()=> {
     const sel_has_edit_permission = (state: State) => state.injected.has_edit_permission ?? false
 
 
+    const sel_activity_calender_props = createSelector(
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): BigCalendarProps<ActivityCEvent>['calendar_props'] => {
+        const calendar_events = event?.activities.map(activity => ({
+          id: activity.id,
+          title: activity.name,
+          start: activity.start_datetime,
+          end: activity.end_datetime,
+          resource: activity
+        })) ?? []
+
+        return {
+          events: calendar_events,
+          selectable: is_editing,
+          resizable: is_editing
+        }
+    })
+
+
     return {
       sel_name_input_props,
       sel_description_input_props,
@@ -124,7 +164,9 @@ export const useSelectors = ()=> {
       sel_event,
       sel_update_events_args,
       sel_is_editing,
-      sel_has_edit_permission
+      sel_has_edit_permission,
+      sel_activity_calender_props,
+      sel_activities,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

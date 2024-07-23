@@ -47,10 +47,16 @@ export const useActions = <TEvent extends BigCalendarEvent>(
 
   }, [ state.props ])
 
+  const on_double_click = useCallback((event: TEvent, e: SyntheticEvent<HTMLElement, Event>) => {
+    state.props.onEventDelete?.(event)
+    state.props?.calendar_props?.onDoubleClickEvent?.(event, e)
+  }, [ state.props ])
+
   return {
     on_calendar_navigate,
     on_calendar_view_change,
     on_selecting,
-    on_key_press_event
+    on_key_press_event,
+    on_double_click
   }
 }

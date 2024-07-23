@@ -39,7 +39,6 @@ export const RichText = (props: RichTextProps) => {
 
 
 export const RichViewer = ({value, label}: RichTextProps) => {
-  console.log("rich_text_styles", rich_text_styles)
 
   return <Fieldset legend={label} styles={rich_text_styles}>
     <div dangerouslySetInnerHTML={{__html: value ?? ""}} className='rich_text_view'/>
