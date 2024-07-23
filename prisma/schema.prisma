@@ -93,6 +93,9 @@ model Event {
 
   activities        EventActivity[]
   tasks             EventTask[]
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 
@@ -121,6 +124,9 @@ model VolunteerAvailabilitySlot {
   end_datetime     DateTime
 
   volunteer        Volunteer       @relation(fields: [volunteer_id], references: [id])
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 
@@ -137,6 +143,9 @@ model EventActivity {
   location         Location?        @relation(fields: [location_id], references: [id])
  
   event            Event           @relation(fields: [event_id], references: [id])
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 
@@ -154,6 +163,9 @@ model EventTask {
 
   event           Event           @relation(fields: [event_id], references: [id])
   volunteers      VolunteerEventTask[]
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 
@@ -166,6 +178,9 @@ model VolunteerEventTask {
 
   volunteer       Volunteer       @relation(fields: [volunteer_id], references: [id])
   event_task      EventTask       @relation(fields: [event_task_id], references: [id])
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 model Location {
@@ -180,6 +195,9 @@ model Location {
   event_activities   EventActivity[]
   event_tasks        EventTask[]
 
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 }
 
 enum BigCalendarView {
@@ -211,6 +229,9 @@ model GlobalVolunteerSettingsDeadlineException {
 
   global_volunteer_setting        GlobalVolunteerSetting @relation(fields: [global_volunteer_setting_id], references: [id])
   volunteer                       Volunteer              @relation(fields: [volunteer_id], references: [id])
+
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 
   @@id([global_volunteer_setting_id, volunteer_id])
 }

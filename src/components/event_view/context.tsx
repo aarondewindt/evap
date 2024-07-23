@@ -2,7 +2,7 @@ import { useContext, createContext, useCallback, useState, useMemo } from 'react
 import { useLocalStorage } from '@mantine/hooks';
 import {produce, Draft} from "immer"
 
-import { init_memory, State, EventViewProviderProps, init_local_storage, local_storage_key } from "./types"
+import { init_memory, State, EventViewProviderProps } from "./types"
 import { useSelectors, SelectedValues } from "./selectors"
 import { useActions } from './actions';
 import { useInject } from './inject';
@@ -17,23 +17,20 @@ const EventViewContext = createContext<Context>({} as Context);
 
 export const EventViewProvider = ({ children, ...props }: EventViewProviderProps) => {
   const [ memory, set_memory_value ] = useState(init_memory)
-  const [ _local_storage, set_persistent_value ] = useLocalStorage({ key: local_storage_key, defaultValue: init_local_storage})  
-  const local_storage = _local_storage ?? init_local_storage
 
   const selectors = useSelectors()
 
   const { state, injected_actions } = useInject(
     useMemo(() => ({
-      props, memory, local_storage, injected: {}
-    }), [ props, memory, local_storage ]), 
+      props, memory, injected: {}
+    }), [ props, memory ]), 
     selectors
   )
 
   const set_state = useCallback((recipe: (draft: Draft<State>)=>void) => {
     const new_state = produce(state, recipe)   
     set_memory_value(new_state.memory)   
-    set_persistent_value(new_state.local_storage)
-  }, [set_persistent_value, set_memory_value, state])
+  }, [ set_memory_value, state])
 
   const actions = useActions(state, selectors, injected_actions, set_state)
   const selected: SelectedValues = Object.fromEntries(Object.entries(selectors)

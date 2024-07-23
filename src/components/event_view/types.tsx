@@ -1,14 +1,42 @@
+import { useCUDEvents, useFindManyEvents } from '@/server_actions/events/hooks'
+import { Prisma } from '@prisma/client'
 import type { ReactNode } from 'react'
 
-export const local_storage_key = "component_local_storage_key"
+
+
+export const event_get_payload: {
+  where?: Prisma.EventWhereInput
+  include: {
+    activities: true,
+    location: true,
+    tasks: true
+  }
+} = {
+  include: {
+    activities: true,
+    location: true,
+    tasks: true
+  }
+}
+
+export type EventInfo = Prisma.EventGetPayload<typeof event_get_payload>
+
 
 export type EventViewProps = { 
   event_id: string
 }
 
-export type Memory = { foo: number }
-export type LocalStorage = { }
-export type Injected = { bar?: string }
+export type Memory = { 
+  edit: {
+    event: EventInfo
+  } | null
+
+}
+
+export type Injected = { 
+  events_query?: ReturnType<typeof useFindManyEvents>
+  events_mutation?: ReturnType<typeof useCUDEvents>
+}
 
 export interface EventViewProviderProps extends EventViewProps {
   children: ReactNode
@@ -17,9 +45,7 @@ export interface EventViewProviderProps extends EventViewProps {
 export interface State {
   props: EventViewProps
   memory: Memory
-  local_storage: LocalStorage  
   injected: Injected
 }
 
-export const init_memory: Memory = { foo: 0 }
-export const init_local_storage: LocalStorage = { }
+export const init_memory: Memory = { edit: null }

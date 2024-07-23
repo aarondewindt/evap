@@ -1,18 +1,25 @@
 import { useMemo } from "react"
 import { State } from "./types"
 import { Selectors } from "./selectors"
+import { useCUDEvents, useFindManyEvents } from "@/server_actions/events/hooks"
 
 
 export const useInject = (state: State, s: Selectors) => {
+  const events_mutation = useCUDEvents()
+
   const state_1 = useInjectValues(state, "injected", {
-    bar: "bar",
+    events_query: useFindManyEvents(s.sel_events_query_args(state)),
+    events_mutation
   })
 
   return {
     state: state_1,
-    injected_actions: {}
+    injected_actions: {
+      cud_events: events_mutation.mutateAsync
+    }
   }
 }
+
 
 
 export const useInjectValue = <S extends keyof State, K extends keyof (State[S])>
