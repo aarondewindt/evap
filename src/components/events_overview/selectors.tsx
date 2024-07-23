@@ -16,7 +16,7 @@ export const useSelectors = ()=> {
     const sel_calendar_settings = (state: State) => state.local_storage.calendar_settings
     const sel_selected_event_id = (state: State) => state.memory.selected_event_id
     const sel_has_edit_permission = (state: State) => state.injected?.has_edit_permission ?? false
-
+    
     const sel_events = createSelector(
       sel_edit,
       sel_query_events,
@@ -87,6 +87,7 @@ export const useSelectors = ()=> {
       sel_calender_props,
       sel_has_edit_permission,
       sel_on_save_args,
+      sel_selected_event_id,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

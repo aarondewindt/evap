@@ -26,6 +26,14 @@ export function EvapAppShell({ children }: AppShellProps) {
           breakpoint: 'sm', 
           collapsed: { mobile: !gctx.is_nav_open } 
         }}
+        aside={{ 
+          width: 350, 
+          breakpoint: 'xs', 
+          collapsed: {
+            desktop: !gctx.is_aside_open,
+            mobile: true
+          }
+        }}
         padding={0}
       >
         <AppShell.Header style={{backgroundColor: "var(--mantine-primary-color-6)"}}>
@@ -34,6 +42,9 @@ export function EvapAppShell({ children }: AppShellProps) {
         <AppShell.Navbar>
           <Navbar/>
         </AppShell.Navbar>
+        <AppShell.Aside id='app_shell_aside'>
+          
+        </AppShell.Aside>
         <AppShell.Main>
           {children}
         </AppShell.Main>

@@ -63,8 +63,12 @@ export const useActions = (
     })
   }, [ set_state ])
 
-  const on_calender_select_event = useCallback((event: RbcEvent) => {
+  const on_calender_select_event = useCallback((event: RbcEvent | null) => {
     set_state((draft) => {
+      if (!event) {
+        draft.memory.selected_event_id = null
+        return
+      }
       draft.memory.selected_event_id = event.resource.id
     })
   }, [ set_state ])

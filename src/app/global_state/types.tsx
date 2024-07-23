@@ -6,6 +6,7 @@ export const local_storage_key = "evap_state"
 
 export type Memory = { 
   is_nav_open: boolean
+  is_aside_open: boolean
 }
 
 export type LocalStorage = {
@@ -30,7 +31,8 @@ export interface State {
 }
 
 export const init_memory: Memory = { 
-  is_nav_open: false
+  is_nav_open: false,
+  is_aside_open: false,
 }
 
 export const init_local_storage: LocalStorage = { }

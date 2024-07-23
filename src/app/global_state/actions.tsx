@@ -21,7 +21,18 @@ export const useActions = (
     })
   }, [set_state])
 
+  const on_aside_toggle = useCallback((open?: boolean) => {
+    set_state((draft) => {
+      if (open !== undefined) {
+        draft.memory.is_aside_open = open
+      } else {
+        draft.memory.is_aside_open = !draft.memory.is_aside_open
+      }
+    })
+  }, [set_state])
+
   return {
-    on_nav_toggle
+    on_nav_toggle,
+    on_aside_toggle
   }
 }

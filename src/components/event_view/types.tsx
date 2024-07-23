@@ -24,6 +24,11 @@ export type EventInfo = Prisma.EventGetPayload<typeof event_get_payload>
 
 export type EventViewProps = { 
   event_id: string
+  onClose?: () => void
+}
+
+export type EventViewAsideProps = Omit<EventViewProps, "event_id"> & {
+  event_id: string | null
 }
 
 export type Memory = { 

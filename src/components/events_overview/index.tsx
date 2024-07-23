@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Stack } from "@mantine/core"
+import { Box, Group, Portal, Stack } from "@mantine/core"
 import type { CalendarEvent, EventsOverviewProps } from "./types"
 import { EventsOverviewProvider, useEventsOverviewContext } from "./context"
 import { Toolbar } from "../toolbar"
@@ -10,6 +10,7 @@ import { ExpandHeight } from "@/utils/expand_height"
 import { BigCalendar } from "../big_calendar"
 import { Prisma } from "@/db"
 import { useCallback } from "react"
+import { EventViewAside } from "../event_view"
 
 
 export const EventsOverview = (props: EventsOverviewProps) => {
@@ -21,12 +22,11 @@ export const EventsOverview = (props: EventsOverviewProps) => {
 
 const EventsOverviewInner = ({}: {}) => {
   const ctx = useEventsOverviewContext()
-
   const draggableAccessor = useCallback((event: CalendarEvent) => ctx.is_editing, [ ctx.is_editing ])
 
   return <>
     <Toolbar
-      right={<EditSaveCancelToolbarButton
+      left={<EditSaveCancelToolbarButton
         is_editing={ctx.is_editing}
         readonly={!ctx.has_edit_permission}
         onEdit={ctx.on_enable_editing}
@@ -52,5 +52,10 @@ const EventsOverviewInner = ({}: {}) => {
         ...ctx.calender_props
       }}     
     />
-  </>
+    <EventViewAside 
+      event_id={ctx.selected_event_id} 
+      onClose={() => ctx.on_calender_select_event(null)}
+    />
+  </>  
 }
+

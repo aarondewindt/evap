@@ -20,4 +20,8 @@ dt {
   font-weight: bold;
 }
 
+.rich_text_view * {
+  pointer-events: none;
+}
+
 

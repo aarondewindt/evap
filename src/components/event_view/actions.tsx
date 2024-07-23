@@ -54,6 +54,7 @@ export const useActions = (
     on_change_event_value,
     on_enable_editing,
     on_cancel_editing,
-    on_save
+    on_save,
+    on_close: state.props.onClose
   }
 }

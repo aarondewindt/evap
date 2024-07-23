@@ -9,6 +9,7 @@ export const useSelectors = ()=> {
   return useMemo(() => {
     
     const sel_is_nav_open = (state: State) => state.memory.is_nav_open
+    const sel_is_aside_open = (state: State) => state.memory.is_aside_open
     const sel_is_mobile_screen = (state: State) => state.injected.is_mobile_screen
 
     const sel_session_query = (state: State) => state.injected.session
@@ -25,6 +26,7 @@ export const useSelectors = ()=> {
 
     return {
       sel_is_nav_open,
+      sel_is_aside_open,
       sel_is_mobile_screen,
       sel_session,
       sel_user_is_volunteer,

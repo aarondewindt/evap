@@ -1,14 +1,16 @@
 "use client"
 
 
-import { Stack, Tabs, TextInput } from "@mantine/core"
-import type { EventViewProps } from "./types"
+import { Portal, Stack, Tabs, TextInput } from "@mantine/core"
+import type { EventViewAsideProps, EventViewProps } from "./types"
 import { EventViewProvider, useEventViewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
-import { ChangeEvent } from "react"
+import { ChangeEvent, useEffect } from "react"
 import { DateTimePicker, DateValue } from "@mantine/dates"
 import { RichText } from "../rich_text"
+import { useGlobalStateContext } from "@/app/global_state"
+import { IconX } from "@tabler/icons-react"
 
 
 export const EventView = (props: EventViewProps) => {
@@ -28,6 +30,13 @@ const EventViewInner = ({}: {}) => {
         onSave={ctx.on_save}
         onCancel={ctx.on_cancel_editing}
       />}
+
+      right={<>
+        { ctx.on_close && 
+          <Toolbar.ActionIcon onClick={ctx.on_close}>
+            <IconX/>
+          </Toolbar.ActionIcon>}
+      </>}
     />
 
     <Tabs defaultValue="general">
@@ -39,7 +48,7 @@ const EventViewInner = ({}: {}) => {
           Schedule
         </Tabs.Tab>
         <Tabs.Tab value="tasks">
-          Volunteer tasks
+          Tasks
         </Tabs.Tab>
       </Tabs.List>
 
@@ -55,14 +64,41 @@ const EventViewInner = ({}: {}) => {
         Volunteer tasks and assignments
       </Tabs.Panel>
     </Tabs>
+
+    
   </>
   
 
 }
 
 
+
+export const EventViewAside = ({ event_id, ...props}: EventViewAsideProps) => {
+  const gctx = useGlobalStateContext()
+  const { is_aside_open, on_aside_toggle } = gctx
+  
+  useEffect(() => {
+    if ((!!event_id) == is_aside_open) return
+    if (!event_id) {
+      on_aside_toggle(false)
+    } else {
+      on_aside_toggle(true)
+    }
+  }, [ event_id, is_aside_open, on_aside_toggle ])
+
+  if (!event_id) return <></>
+
+  return <Portal target="#app_shell_aside">
+    <EventView event_id={event_id} {...props}/>
+  </Portal>
+}
+
+
+
 const GeneralTab = () => {
   const ctx = useEventViewContext()
+
+  console.log("notes_props", ctx.notes_props)
 
   return <Stack p="sm">
     <TextInput 
