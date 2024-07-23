@@ -1,6 +1,6 @@
 "use client"
 
-import { darken, getThemeColor, isLightColor, lighten, luminance, MantineColor, useMantineTheme } from "@mantine/core"
+import { alpha, darken, getThemeColor, isLightColor, lighten, luminance, MantineColor, useMantineTheme } from "@mantine/core"
 import type { BigCalendarEvent, BigCalendarProps } from "./types"
 import { useBigCalendarContext } from "./context"
 import { ExpandHeight } from "@/utils/expand_height"
@@ -34,6 +34,7 @@ export const BigCalendar = <TEvent extends BigCalendarEvent = BigCalendarEvent>(
   const event_prop_getter = useCallback((event: BigCalendarEvent, start: Date, end: Date, isSelected: boolean) => {
     let bg = getThemeColor(event.color ?? 'blue', theme)
     if (isSelected) bg = darken(bg, 0.3)
+    if (event.alpha) bg = alpha(bg, event.alpha)
 
     const tx = lighten(bg, 0.95)
     const style: CSSProperties = {

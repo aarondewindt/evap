@@ -3,7 +3,7 @@ import { useMemo } from "react"
 import { createSelector } from 'reselect'
 
 import { ActivityCEvent, event_get_payload, EventInfo, type State } from "./types"
-import { TextInputProps } from "@mantine/core"
+import { alpha, TextInputProps } from "@mantine/core"
 import { DateTimePickerProps } from "@mantine/dates"
 import { RichTextProps } from "../rich_text"
 // import { EventFindManyArgs } from "@/server_actions/events/actions"
@@ -143,13 +143,24 @@ export const useSelectors = ()=> {
           title: activity.name,
           start: activity.start_datetime,
           end: activity.end_datetime,
-          resource: activity
+          resource: activity,
+          alpha: 0.9,
         })) ?? []
 
         return {
           events: calendar_events,
           selectable: is_editing,
-          resizable: is_editing
+          resizable: is_editing,
+          backgroundEvents: [
+            {
+              title: event?.name,
+              start: event?.start_datetime,
+              end: event?.end_datetime,
+              color: "red",
+              resource: {}
+            }
+          
+          ],          
         }
     })
 

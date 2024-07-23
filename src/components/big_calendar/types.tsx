@@ -10,6 +10,7 @@ export type BigCalendarEvent = {
   start?: Date | undefined;
   end?: Date | undefined;
   color?: MantineColor | undefined;
+  alpha?: number | undefined;
   resource: object;
 }
 

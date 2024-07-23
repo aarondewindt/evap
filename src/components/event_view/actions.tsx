@@ -89,11 +89,13 @@ export const useActions = (
       onConfirm: async () => {
         set_state((draft) => {
           if (!draft.memory.edit) return
-          const activity = draft.memory.edit.activities.new.find((a) => a.id === event.resource.id)
+          const resource = event.resource
+          if (!("id" in resource)) return
+          const activity = draft.memory.edit.activities.new.find((a) => a.id === resource.id)
           if (activity) {
-            draft.memory.edit.activities.new = draft.memory.edit.activities.new.filter((a) => a.id !== event.resource.id)
+            draft.memory.edit.activities.new = draft.memory.edit.activities.new.filter((a) => a.id !== resource.id)
           } else {
-            draft.memory.edit.activities.deleted.push(event.resource.id)
+            draft.memory.edit.activities.deleted.push(resource.id)
           }
         })
       }
@@ -103,7 +105,9 @@ export const useActions = (
   const on_activity_calendar_event_edit = useCallback(({ event, start, end }: { event: ActivityCEvent, start: string | Date, end: string | Date }) => {
     set_state((draft) => {
       if (!draft.memory.edit) return
-      const activity_id = event.resource.id
+      const resource = event.resource
+      if (!("id" in resource)) return
+      const activity_id = resource.id
 
       const edit_activities = activity_id.startsWith("new_") ? draft.memory.edit.activities.new : draft.memory.edit.activities.updated
       const updated_activity = edit_activities.find((e) => e.id === activity_id)
