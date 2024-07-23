@@ -1,4 +1,4 @@
-import _ from "lodash"
+import _, { create } from "lodash"
 import { useMemo } from "react"
 import { createSelector } from 'reselect'
 
@@ -8,6 +8,7 @@ import { DateTimePickerProps } from "@mantine/dates"
 import { RichTextProps } from "../rich_text"
 // import { EventFindManyArgs } from "@/server_actions/events/actions"
 import { prisma } from "@/db"
+import { CUDEventsArgs } from "@/server_actions/events/actions"
 
 
 export type EventFindManyArgs = Parameters<typeof prisma.event.findMany<typeof event_get_payload>>[0]
@@ -34,40 +35,84 @@ export const useSelectors = ()=> {
     const sel_is_editing = (state: State) => !!state.memory.edit
     const sel_edit = (state: State) => state.memory.edit
 
-    const sel_form_values = createSelector(
+    const sel_event = createSelector(
       sel_unedited_event,
       sel_edit,
-      (unedited_event, edit): Partial<EventInfo> => {
-        if (!edit) return {}
+      (unedited_event, edit): EventInfo | null => {
+
+        if (!unedited_event) return null
+        
+        if (!edit) return unedited_event
        
-        return _.pick(edit.event, ["name", "description", "start_date", "end_date", "notes"])
+        return edit.event
       }
     )
-
+    
     const sel_name_input_props = createSelector(
-      sel_form_values,
-      (form_values): TextInputProps => ({})
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): TextInputProps => ({
+        value: event?.name ?? "",
+        disabled: !is_editing
+      })
     )
 
     const sel_description_input_props = createSelector(
-      sel_form_values,
-      (form_values): TextInputProps => ({})
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): TextInputProps => ({
+        value: event?.description ?? "",
+        disabled: !is_editing
+      })
     )
 
     const sel_start_date_time_picker_props = createSelector(
-      sel_form_values,
-      (form_values): DateTimePickerProps => ({})
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): DateTimePickerProps => ({
+        value: event?.start_datetime ?? null,
+        disabled: !is_editing
+      })
     )
 
     const sel_end_date_time_picker_props = createSelector(
-      sel_form_values,
-      (form_values): DateTimePickerProps => ({})
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): DateTimePickerProps => ({
+        value: event?.end_datetime ?? null,
+        disabled: !is_editing
+      })
     )
 
     const sel_notes_props = createSelector(
-      sel_form_values,
-      (form_values): RichTextProps => ({})
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): RichTextProps => ({
+        value: event?.notes ?? "",
+        editor_enabled: is_editing
+      })
     )
+
+    const sel_update_events_args = createSelector(
+      sel_unedited_event,
+      sel_edit,
+      (unedited_event, edit): CUDEventsArgs | null => {
+        if (!edit) return null
+        if (_.isEqual(unedited_event, edit.event)) return null
+
+        return {
+          update: [ 
+            {
+              where: { id: edit.event.id },
+              data: _.pick(edit.event, "name", "description", "start_datetime", "end_datetime", "notes")
+            }
+          ]
+        }
+      }
+    )
+
+    const sel_has_edit_permission = (state: State) => state.injected.has_edit_permission ?? false
+
 
     return {
       sel_name_input_props,
@@ -76,6 +121,10 @@ export const useSelectors = ()=> {
       sel_end_date_time_picker_props,
       sel_notes_props,
       sel_events_query_args,
+      sel_event,
+      sel_update_events_args,
+      sel_is_editing,
+      sel_has_edit_permission
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

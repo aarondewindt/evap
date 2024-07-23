@@ -1,3 +1,6 @@
+"use client"
+
+
 import { EventView } from "@/components/event_view"
 
 

@@ -30,11 +30,6 @@ export const find_many_events = async (args: EventFindManyArgs) => {
 
 
 export const cud_events = async (args: CUDEventsArgs) => {
-    const session = await get_session()
-    if (check_permission(session, [])) {
-      return []
-    }
-
     const { create, create_many, update, update_many, delete_, delete_many } = args
 
     const created_promise = Promise.all(

@@ -36,6 +36,7 @@ export type Memory = {
 export type Injected = { 
   events_query?: ReturnType<typeof useFindManyEvents>
   events_mutation?: ReturnType<typeof useCUDEvents>
+  has_edit_permission?: boolean | null
 }
 
 export interface EventViewProviderProps extends EventViewProps {
