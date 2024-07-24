@@ -134,8 +134,6 @@ const ActivitiesTab = () => {
   const draggableAccessor = useCallback((event: ActivityCEvent) => ctx.is_editing, [ ctx.is_editing ])
 
   return <Stack p="sm">
-    aljkdnals
-
     <BigCalendar<ActivityCEvent>
       expand_height={true}
       onEventDelete={(cevent) => ctx.on_calendar_delete("activities", cevent)}
@@ -144,6 +142,7 @@ const ActivitiesTab = () => {
         timeslots: 2,
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
+        scrollToTime: ctx.event?.start_datetime,
         draggableAccessor,
         // onSelectEvent: ctx.on_calender_select_event,
         onSelectSlot: (slot_info) => ctx.on_calender_select_slot("activities", slot_info),
@@ -174,6 +173,7 @@ const TasksTab = () => {
         timeslots: 2,
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
+        scrollToTime: ctx.event?.start_datetime,
         draggableAccessor,
         // onSelectEvent: ctx.on_calender_select_event,
         onSelectSlot: (slot_info) => ctx.on_calender_select_slot("tasks", slot_info),

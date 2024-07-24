@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { IconConfetti, IconHome2, IconSettings, IconUsersGroup } from '@tabler/icons-react';
+import { IconConfetti, IconHome2, IconMapPin, IconSettings, IconUsersGroup } from '@tabler/icons-react';
 
 
 export type NavItem = {
@@ -33,6 +33,13 @@ export const navmap: NavMap = [
     href: "/volunteers",
     left_section: <IconUsersGroup size="1rem" stroke={1.5}/>,
     active_pathname_pattern: /^\/volunteers/
+  },
+  {
+    label: "Locations",
+    href: "/locations",
+    left_section: <IconMapPin size="1rem" stroke={1.5}/>,
+    active_pathname_pattern: /^\/locations/,
+    must_be_authenticated: true
   },
   {
     label: "Admin",

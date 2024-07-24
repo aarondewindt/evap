@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react"
 import { useSelectors } from "./selectors"
-import { ActivityCEvent, Calendar, CEvents, EventInfo, State } from "./types"
+import { CEvents, EventInfo, State } from "./types"
 import { Draft } from "immer"
 import { useInject } from "./inject"
 import { modals } from "@mantine/modals"
