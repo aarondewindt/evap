@@ -1,6 +1,7 @@
-import { TextInput, ActionIcon, NumberInput, Loader, Overlay, MultiSelect, createTheme, Select, Autocomplete, PillsInput, virtualColor } from '@mantine/core';
+import { TextInput, ActionIcon, NumberInput, Loader, Overlay, MultiSelect, createTheme, Select, Autocomplete, PillsInput, virtualColor, Input, InputWrapper } from '@mantine/core';
 import contained_input_classes from "@/styles/contained_input.module.css"
 import { DateTimePicker } from '@mantine/dates';
+import { LocationSelect } from './components/location_select';
 
 
 export const theme = createTheme({
@@ -98,6 +99,12 @@ export const theme = createTheme({
       defaultProps: {
         classNames: contained_input_classes,
         valueFormat: "DD MMM YYYY hh:mm A"
+      }
+    }),
+
+    InputWrapper: InputWrapper.extend({
+      defaultProps: {
+        classNames: contained_input_classes,
       }
     }),
 

@@ -10,6 +10,11 @@ export type LocationViewAsideProps = Omit<LocationViewProps, "location_id"> & {
   location_id: string | null
 }
 
+export type LocationViewModalProps = Omit<LocationViewProps, "location_id"> & {
+  location_id: string | null
+  onClose: () => void
+}
+
 export type Memory = { 
   edit: Location | null
 }

@@ -12,6 +12,7 @@ import { RichText } from "../rich_text"
 import { useGlobalStateContext } from "@/app/global_state"
 import { IconX } from "@tabler/icons-react"
 import { BigCalendar } from "../big_calendar"
+import { LocationSelect } from "../location_select"
 
 
 export const EventView = (props: EventViewProps) => {
@@ -119,6 +120,12 @@ const GeneralTab = () => {
       label="End date & time"
       onChange={(e: DateValue) => { e && ctx.on_change_event_value("end_datetime", e) }}
       {...ctx.end_date_time_picker_props}
+    />
+
+    <LocationSelect
+      label="Location"
+      onChange={(e) => { ctx.on_change_event_value("location_id", e) }}
+      {...ctx.location_props}
     />
 
     <RichText 

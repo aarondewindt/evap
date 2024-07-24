@@ -10,6 +10,7 @@ import { RichTextProps } from "../rich_text"
 import { prisma } from "@/db"
 import { CUDEventsArgs } from "@/server_actions/events/actions"
 import { BigCalendarProps } from "../big_calendar/types"
+import { LocationSelectProps } from "../location_select"
 
 
 export type EventFindManyArgs = Parameters<typeof prisma.event.findMany<typeof event_get_payload>>[0]
@@ -123,6 +124,15 @@ export const useSelectors = ()=> {
       })
     )
 
+    const sel_location_props = createSelector(
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): LocationSelectProps => ({
+        value: event?.location_id ?? null,
+        disabled: !is_editing
+      })
+    )
+
     const sel_notes_props = createSelector(
       sel_event,
       sel_is_editing,
@@ -145,7 +155,7 @@ export const useSelectors = ()=> {
             {
               where: { id: edit.event.id },
               data: {
-                ..._.pick(edit.event, "name", "description", "start_datetime", "end_datetime", "notes"),
+                ..._.pick(edit.event, "name", "description", "start_datetime", "end_datetime", "notes", "location_id"),
 
                 activities: {
                   create: edit.activities.new.map(activity => 
@@ -255,6 +265,7 @@ export const useSelectors = ()=> {
       sel_activities,
       sel_tasks,
       sel_tasks_calender_props,
+      sel_location_props,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

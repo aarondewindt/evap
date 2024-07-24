@@ -19,6 +19,7 @@ export const useActions = (
   }, [ state, s, a, set_state ])
 
   const on_change_event_value = useCallback(<T extends keyof EventInfo,>(key: T, value: EventInfo[T]) => {
+    console.log("on_change_event_value", key, value)
     set_state((draft) => {
       if (!draft.memory.edit) return
       draft.memory.edit.event[key] = value

@@ -1,6 +1,6 @@
 
-import { Box, Portal, Stack, TextInput } from "@mantine/core"
-import type { LocationViewAsideProps, LocationViewProps } from "./types"
+import { Box, Modal, Portal, Stack, TextInput } from "@mantine/core"
+import type { LocationViewAsideProps, LocationViewModalProps, LocationViewProps } from "./types"
 import { LocationViewProvider, useLocationViewContext } from "./context"
 import { ChangeEvent, useEffect } from "react"
 import { Toolbar } from "../toolbar"
@@ -88,4 +88,15 @@ export const LocationViewAside = ({ location_id, ...props}: LocationViewAsidePro
   return <Portal target="#app_shell_aside">
     <LocationView location_id={location_id} {...props}/>
   </Portal>
+}
+
+
+
+export const LocationViewModal = ({ location_id, onClose, ...props}: LocationViewModalProps) => {
+  console.log("LocationViewModal", location_id)
+  if (!location_id) return <></>
+
+  return <Modal opened={!!location_id} onClose={onClose} title="Location">
+    <LocationView location_id={location_id} {...props}/>
+  </Modal>
 }
