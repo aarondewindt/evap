@@ -141,6 +141,7 @@ const ActivitiesTab = () => {
       onEventDelete={(cevent) => ctx.on_calendar_delete("activities", cevent)}
 
       calendar_props={{
+        timeslots: 2,
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
         draggableAccessor,
@@ -170,6 +171,7 @@ const TasksTab = () => {
       onEventDelete={(cevent) => ctx.on_calendar_delete("tasks", cevent)}
 
       calendar_props={{
+        timeslots: 2,
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
         draggableAccessor,
