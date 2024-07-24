@@ -65,7 +65,7 @@ const EventViewInner = ({}: {}) => {
       </Tabs.Panel>
 
       <Tabs.Panel value="tasks">
-        Volunteer tasks and assignments
+        <TasksTab/>
       </Tabs.Panel>
     </Tabs>
   </>
@@ -133,27 +133,54 @@ const ActivitiesTab = () => {
   const ctx = useEventViewContext()
   const draggableAccessor = useCallback((event: ActivityCEvent) => ctx.is_editing, [ ctx.is_editing ])
 
-  console.log("ctx.event?.start_datetime", ctx.event?.start_datetime)
-
   return <Stack p="sm">
     aljkdnals
 
     <BigCalendar<ActivityCEvent>
       expand_height={true}
-      onEventDelete={ctx.on_activity_calendar_delete}
+      onEventDelete={(cevent) => ctx.on_calendar_delete("activities", cevent)}
 
       calendar_props={{
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
         draggableAccessor,
         // onSelectEvent: ctx.on_calender_select_event,
-        onSelectSlot: ctx.on_activity_calender_select_slot,
-        onEventDrop: ctx.on_activity_calendar_event_edit,
-        onEventResize: ctx.on_activity_calendar_event_edit,
+        onSelectSlot: (slot_info) => ctx.on_calender_select_slot("activities", slot_info),
+        onEventDrop: (e) => ctx.on_calendar_event_edit("activities", e),
+        onEventResize: (e) => ctx.on_calendar_event_edit("activities", e),
         // onNavigate: ctx.on_calendar_navigate,
         // onView: ctx.on_calendar_view_change,
 
         ...ctx.activity_calender_props
+      }}
+    />
+  </Stack>
+}
+
+
+const TasksTab = () => {
+  const ctx = useEventViewContext()
+  const draggableAccessor = useCallback((event: ActivityCEvent) => ctx.is_editing, [ ctx.is_editing ])
+
+  return <Stack p="sm">
+    aljkdnals
+
+    <BigCalendar<ActivityCEvent>
+      expand_height={true}
+      onEventDelete={(cevent) => ctx.on_calendar_delete("tasks", cevent)}
+
+      calendar_props={{
+        defaultDate: ctx.event?.start_datetime,
+        defaultView: "day",
+        draggableAccessor,
+        // onSelectEvent: ctx.on_calender_select_event,
+        onSelectSlot: (slot_info) => ctx.on_calender_select_slot("tasks", slot_info),
+        onEventDrop: (e) => ctx.on_calendar_event_edit("tasks", e),
+        onEventResize: (e) => ctx.on_calendar_event_edit("tasks", e),
+        // onNavigate: ctx.on_calendar_navigate,
+        // onView: ctx.on_calendar_view_change,
+
+        ...ctx.tasks_calender_props
       }}
     />
   </Stack>

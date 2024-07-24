@@ -2,7 +2,7 @@ import _, { create } from "lodash"
 import { useMemo } from "react"
 import { createSelector } from 'reselect'
 
-import { ActivityCEvent, event_get_payload, EventInfo, type State } from "./types"
+import { ActivityCEvent, event_get_payload, EventInfo, TasksCEvent, type State } from "./types"
 import { alpha, TextInputProps } from "@mantine/core"
 import { DateTimePickerProps } from "@mantine/dates"
 import { RichTextProps } from "../rich_text"
@@ -53,17 +53,36 @@ export const useSelectors = ()=> {
           .concat(edit.activities.new)
     })
 
+    const sel_tasks = createSelector(
+      sel_unedited_event,
+      sel_edit,
+      (unedited_event, edit): EventInfo['tasks'] => {
+        if (!unedited_event) return []
+        if (!edit) return unedited_event.tasks
+
+        return unedited_event.tasks
+          .map(task => {
+            const updated_task = edit.tasks.updated.find(a => a.id === task.id)
+            if (updated_task) return updated_task
+            return task
+          })
+          .filter(task => !edit.tasks.deleted.includes(task.id))
+          .concat(edit.tasks.new)
+    })
+
     const sel_event = createSelector(
       sel_unedited_event,
       sel_edit,
       sel_activities,
-      (unedited_event, edit, activities): EventInfo | null => {
+      sel_tasks,
+      (unedited_event, edit, activities, tasks): EventInfo | null => {
         if (!unedited_event) return null        
         if (!edit) return unedited_event
        
         return {
           ...edit.event,
-          activities
+          activities,
+          tasks
         }
       }
     )
@@ -158,8 +177,37 @@ export const useSelectors = ()=> {
               end: event?.end_datetime,
               color: "red",
               resource: {}
-            }
-          
+            }          
+          ],          
+        }
+    })
+
+
+    const sel_tasks_calender_props = createSelector(
+      sel_event,
+      sel_is_editing,
+      (event, is_editing): BigCalendarProps<TasksCEvent>['calendar_props'] => {
+        const calendar_events = event?.tasks.map(task => ({
+          id: task.id,
+          title: task.name,
+          start: task.start_datetime,
+          end: task.end_datetime,
+          resource: task,
+          alpha: 0.9,
+        })) ?? []
+
+        return {
+          events: calendar_events,
+          selectable: is_editing,
+          resizable: is_editing,
+          backgroundEvents: [
+            {
+              title: event?.name,
+              start: event?.start_datetime,
+              end: event?.end_datetime,
+              color: "red",
+              resource: {}
+            }          
           ],          
         }
     })
@@ -178,6 +226,8 @@ export const useSelectors = ()=> {
       sel_has_edit_permission,
       sel_activity_calender_props,
       sel_activities,
+      sel_tasks,
+      sel_tasks_calender_props,
     } satisfies {[key: `sel_${string}`]: CallableFunction }
   }, [])
 }

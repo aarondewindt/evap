@@ -23,6 +23,10 @@ export const event_get_payload: {
 export type EventInfo = Prisma.EventGetPayload<typeof event_get_payload>
 export type ActivityCEvent = BigCalendarEvent & { resource: EventInfo['activities'][0] | {} }
 export type TasksCEvent = BigCalendarEvent & { resource: EventInfo['tasks'][0] | {} }
+export type CEvents = {
+  activities: ActivityCEvent
+  tasks: TasksCEvent
+}
 
 export type EventViewProps = { 
   event_id: string
@@ -39,6 +43,11 @@ export type Memory = {
     activities: {
       new: EventInfo['activities']
       updated: EventInfo['activities']
+      deleted: string[]
+    }
+    tasks: {
+      new: EventInfo['tasks']
+      updated: EventInfo['tasks']
       deleted: string[]
     }
   } | null

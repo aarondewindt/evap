@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react"
 import { useSelectors } from "./selectors"
-import { ActivityCEvent, EventInfo, State } from "./types"
+import { ActivityCEvent, Calendar, CEvents, EventInfo, State } from "./types"
 import { Draft } from "immer"
 import { useInject } from "./inject"
 import { modals } from "@mantine/modals"
@@ -35,6 +35,11 @@ export const useActions = (
           new: [],
           updated: [],
           deleted: []
+        },
+        tasks: {
+          new: [],
+          updated: [],
+          deleted: []
         }
       }
     })
@@ -60,14 +65,14 @@ export const useActions = (
 
   // Activities calendar
   // on_activity_calender_select_event
-  const on_activity_calender_select_slot = useCallback((slot_info: { start: Date, end: Date }) => {
+  const on_calender_select_slot = useCallback((calendar: keyof CEvents, slot_info: { start: Date, end: Date }) => {
     set_state((draft) => {
       if (!draft.memory.edit) return
 
       const name = window.prompt("New Activity Name")
       if (!name) return
 
-      draft.memory.edit.activities.new.push({
+      draft.memory.edit[calendar].new.push({
         id: `new_${Date.now()}`,
         event_id: draft.memory.edit.event.id,
         name,
@@ -80,47 +85,49 @@ export const useActions = (
     })
   }, [ set_state ])
   
-  const on_activity_calendar_delete = useCallback((event: ActivityCEvent) => {
+  const on_calendar_delete = useCallback(<T extends keyof CEvents,>(calendar: T, cevent: CEvents[T]) => {
     modals.openConfirmModal({
-      title: 'Delete activity?',
-      children: <Text>Are you sure you want to delete &apos;{event.title}&apos;?</Text>,
+      title: `Delete ${calendar}?`,
+      children: <Text>Are you sure you want to delete &apos;{cevent.title}&apos;?</Text>,
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
         set_state((draft) => {
           if (!draft.memory.edit) return
-          const resource = event.resource
+          const resource = cevent.resource
           if (!("id" in resource)) return
-          const activity = draft.memory.edit.activities.new.find((a) => a.id === resource.id)
-          if (activity) {
-            draft.memory.edit.activities.new = draft.memory.edit.activities.new.filter((a) => a.id !== resource.id)
+          const item = draft.memory.edit[calendar].new.find((a) => a.id === resource.id)
+          if (item) {
+            draft.memory.edit[calendar].new = draft.memory.edit[calendar].new.filter((a) => a.id !== resource.id)
           } else {
-            draft.memory.edit.activities.deleted.push(resource.id)
+            draft.memory.edit[calendar].deleted.push(resource.id)
           }
         })
       }
     })    
   }, [ set_state ])
 
-  const on_activity_calendar_event_edit = useCallback(({ event, start, end }: { event: ActivityCEvent, start: string | Date, end: string | Date }) => {
+  const on_calendar_event_edit = useCallback(<T extends keyof CEvents,>(
+          calendar: T,
+          { event, start, end }: { event: CEvents[T], start: string | Date, end: string | Date }) => {
     set_state((draft) => {
       if (!draft.memory.edit) return
       const resource = event.resource
       if (!("id" in resource)) return
-      const activity_id = resource.id
+      const item_id = resource.id
 
-      const edit_activities = activity_id.startsWith("new_") ? draft.memory.edit.activities.new : draft.memory.edit.activities.updated
-      const updated_activity = edit_activities.find((e) => e.id === activity_id)
+      const edit_items = item_id.startsWith("new_") ? draft.memory.edit[calendar].new : draft.memory.edit[calendar].updated
+      const updated_item = edit_items.find((e) => e.id === item_id)
 
-      if (updated_activity) {
-        updated_activity.start_datetime = new Date(start)
-        updated_activity.end_datetime = new Date(end)
+      if (updated_item) {
+        updated_item.start_datetime = new Date(start)
+        updated_item.end_datetime = new Date(end)
       } else {
-        const activities = s.sel_activities(draft)
-        const activity = activities.find((e) => e.id === activity_id)
-        if (!activity) return
-        draft.memory.edit.activities.updated.push({
-          ...activity,
+        const items = calendar == "activities" ? s.sel_activities(draft) : s.sel_tasks(draft)
+        const item = items.find((e) => e.id === item_id)
+        if (!item) return
+        draft.memory.edit[calendar].updated.push({
+          ...item,
           start_datetime: new Date(start),
           end_datetime: new Date(end)
         })
@@ -142,8 +149,8 @@ export const useActions = (
     on_save,
     on_close: state.props.onClose,
 
-    on_activity_calender_select_slot,
-    on_activity_calendar_delete,
-    on_activity_calendar_event_edit
+    on_calender_select_slot,
+    on_calendar_delete,
+    on_calendar_event_edit,
   }
 }
