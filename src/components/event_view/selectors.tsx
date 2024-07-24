@@ -134,16 +134,43 @@ export const useSelectors = ()=> {
 
     const sel_update_events_args = createSelector(
       sel_unedited_event,
+      sel_event,
       sel_edit,
-      (unedited_event, edit): CUDEventsArgs | null => {
+      (unedited_event, edited_event, edit): CUDEventsArgs | null => {
         if (!edit) return null
-        if (_.isEqual(unedited_event, edit.event)) return null
+        if (_.isEqual(unedited_event, edited_event)) return null
 
         return {
           update: [ 
             {
               where: { id: edit.event.id },
-              data: _.pick(edit.event, "name", "description", "start_datetime", "end_datetime", "notes")
+              data: {
+                ..._.pick(edit.event, "name", "description", "start_datetime", "end_datetime", "notes"),
+
+                activities: {
+                  create: edit.activities.new.map(activity => 
+                    _.pick(activity, ["name", "description", "start_datetime", "end_datetime", "notes", "location_id"])),
+
+                  update: edit.activities.updated.map(activity => ({
+                    where: { id: activity.id },
+                    data: _.pick(activity, ["name", "description", "start_datetime", "end_datetime", "notes", "location_id"])
+                  })),
+
+                  deleteMany: edit.activities.deleted.map(id => ({ id }))
+                },
+
+                tasks: {
+                  create: edit.tasks.new.map(task => 
+                    _.pick(task, ["name", "description", "start_datetime", "end_datetime", "notes", "location_id"])),
+
+                  update: edit.tasks.updated.map(task => ({
+                    where: { id: task.id },
+                    data: _.pick(task, ["name", "description", "start_datetime", "end_datetime", "notes", "location_id"])
+                  })),
+
+                  deleteMany: edit.tasks.deleted.map(id => ({ id }))
+                },
+              }
             }
           ]
         }
@@ -151,7 +178,7 @@ export const useSelectors = ()=> {
     )
 
     const sel_has_edit_permission = (state: State) => state.injected.has_edit_permission ?? false
-
+    
 
     const sel_activity_calender_props = createSelector(
       sel_event,

@@ -52,7 +52,13 @@ export const useActions = (
   }, [ set_state ])
 
   const on_save = useCallback(async () => {
+
+    
+
     const args = s.sel_update_events_args(state)
+
+    console.log("on_save", args)
+
     if (!args) return
 
     await a.cud_events(args)
