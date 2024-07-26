@@ -52,7 +52,7 @@ export interface State {
 export const init_memory: Memory = { 
   edit: null,
   optimistic: null,
-  calendar_date: new Date(),
+  calendar_date: new Date(2024, 7, 18),
   calendar_view: 'week',
   selected_slot_id: null,
   calendar_settings_set: false,

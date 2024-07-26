@@ -42,19 +42,19 @@ const VolunteerViewInner = ({}: {}) => {
         Welcome SoWee 2024 volunteer!!
       </>,
       children: <>
-        <Text>
+        {/* <Text>
           You can fill in your availability and eventually view your schedule on this page. Feel free to leave any notes for the 
           SoWee comittee or contact us through the Whatsapp group if you have any questions.
-        </Text>
+        </Text> */}
         <Text mt="sm">
           To edit your availability:
         </Text>
         <List>
-          <List.Item>Start by clicking the edit button.</List.Item>
-          <List.Item>Click and drag on the calendar to mark time slots as available.</List.Item>
-          <List.Item>If you&apos;re on a touchscreen, longpress before dragging.</List.Item>
-          <List.Item>Double click slots to delete them.</List.Item>
-          <List.Item>Changes are saved automatically</List.Item>
+          {/* <List.Item>Start by clicking the edit button.</List.Item> */}
+          <List.Item>Click and drag on the calendar.</List.Item>
+          <List.Item>Touchscreen? Longpress before dragging.</List.Item>
+          <List.Item>Double click to delete.</List.Item>
+          <List.Item>Changes are saved automatically.</List.Item>
         </List>
         { ctx.edit_deadline && 
           <Box mt="sm">
@@ -85,6 +85,11 @@ const VolunteerViewInner = ({}: {}) => {
       }
     }   
   }, [ ctx.global_volunteer_settings?.isSuccess ])
+
+
+  useDidUpdate(() => {
+    ctx.on_enable_editing()
+  }, [ ctx.volunteer_q?.isSuccess ])
 
   const draggable_accessor = useCallback((event: CalendarEvent) => ctx.is_editing, [ ctx.is_editing ])
 
@@ -121,13 +126,13 @@ const VolunteerViewInner = ({}: {}) => {
       //   onCancel={ctx.on_cancel_editing}
       // />}
 
-      left={<EditDoneToolbarButton
-        is_editing={ctx.is_editing}
-        readonly={!ctx.has_edit_permission || ctx.has_deadline_passed}
-        onEdit={ctx.on_enable_editing}
-        onDone={ctx.on_cancel_editing}
-        done_label="Finish editing"
-      />}
+      // left={<EditDoneToolbarButton
+      //   is_editing={ctx.is_editing}
+      //   readonly={!ctx.has_edit_permission || ctx.has_deadline_passed}
+      //   onEdit={ctx.on_enable_editing}
+      //   onDone={ctx.on_cancel_editing}
+      //   done_label="Finish editing"
+      // />}
 
       center={<>{
         ctx.has_deadline_passed ? <>
