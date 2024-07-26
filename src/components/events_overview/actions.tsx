@@ -82,7 +82,9 @@ export const useActions = (
         name: "New Event",
         description: "",
         notes: "",
-        location_id: null
+        location_id: null,
+        created_at: new Date(),
+        updated_at: new Date(),
       })
     })
   }, [ set_state ])

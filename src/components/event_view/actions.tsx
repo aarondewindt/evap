@@ -87,7 +87,9 @@ export const useActions = (
         start_datetime: slot_info.start,
         end_datetime: slot_info.end,
         notes: "",
-        location_id: null,        
+        location_id: null,    
+        created_at: new Date(),
+        updated_at: new Date(),    
       })
     })
   }, [ set_state ])

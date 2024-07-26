@@ -125,7 +125,9 @@ export const useActions = (
         id: `new_${start.toISOString()}`,
         volunteer_id: draft.memory.edit.volunteer.id,
         start_datetime: start,
-        end_datetime: end
+        end_datetime: end,
+        created_at: new Date(),
+        updated_at: new Date()
       })
     })
     on_save_debounced(true)
@@ -161,7 +163,9 @@ export const useActions = (
           id: slot_id,
           volunteer_id: draft.memory.edit.volunteer.id,
           start_datetime: start,
-          end_datetime: end
+          end_datetime: end,
+          created_at: new Date(),
+          updated_at: new Date()
         })
       }
     })
