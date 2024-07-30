@@ -147,6 +147,7 @@ const ActivitiesTab = () => {
 
       calendar_props={{
         timeslots: 2,
+        step: 5,
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
         scrollToTime: ctx.event?.start_datetime,
@@ -178,6 +179,7 @@ const TasksTab = () => {
 
       calendar_props={{
         timeslots: 2,
+        step: 5,
         defaultDate: ctx.event?.start_datetime,
         defaultView: "day",
         scrollToTime: ctx.event?.start_datetime,
