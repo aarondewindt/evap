@@ -26,7 +26,7 @@ export const navmap: NavMap = [
     href: "/events",
     left_section: <IconConfetti size="1rem" stroke={1.5}/>,
     active_pathname_pattern: /^\/events/,
-    must_be_authenticated: true
+    must_be_authenticated: false
   },
   {
     label: "Volunteers",
@@ -39,7 +39,7 @@ export const navmap: NavMap = [
     href: "/locations",
     left_section: <IconMapPin size="1rem" stroke={1.5}/>,
     active_pathname_pattern: /^\/locations/,
-    must_be_authenticated: true
+    must_be_authenticated: false
   },
   {
     label: "Admin",
