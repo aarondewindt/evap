@@ -5,7 +5,7 @@ import type { CalendarEvent, VolunteerViewProps } from "./types"
 import { VolunteerViewProvider, useVolunteerViewContext } from "./context"
 import { Toolbar } from "../toolbar"
 import { IconCancel, IconDeviceFloppy, IconEdit, IconHelp } from "@tabler/icons-react"
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Calendar, SlotGroupPropGetter, Views } from "react-big-calendar"
 import { localizer, DnDCalendar } from "@/calendar_localizer"
 import { EditDoneToolbarButton, EditSaveCancelToolbarButton } from "../edit_save_cancel_toolbar_button"
@@ -79,17 +79,37 @@ const VolunteerViewInner = ({}: {}) => {
         ctx.global_volunteer_settings.data?.default_calendar_date || null,
         ctx.global_volunteer_settings.data?.default_calendar_view || null,
       )
-      if (!ctx.help_msg_shown_before) {
-        show_help_modal()
-        ctx.on_help_msg_shown()
-      }
+      show_help_modal()
+      // if (!ctx.help_msg_shown_before) {
+      //   show_help_modal()
+      //   ctx.on_help_msg_shown()
+      // }
     }   
-  }, [ ctx.global_volunteer_settings?.isSuccess ])
+  }, [ ctx.global_volunteer_settings?.isSuccess])
 
 
-  useDidUpdate(() => {
-    ctx.on_enable_editing()
-  }, [ ctx.volunteer_q?.isSuccess ])
+  const ref = useRef({ ctx })
+  useEffect(() => {
+    ref.current = { ctx }
+  }, [ ctx ])
+
+  useEffect(() => {
+    // console.log("did update: enable editing")
+    // if (ctx.volunteer_q?.isSuccess) {
+    //   ctx.on_enable_editing()
+    // }
+
+    const on_timeout = () => {
+      if (ref.current.ctx.volunteer !== null) {
+        ref.current.ctx.on_enable_editing()
+      } else {
+        setTimeout(on_timeout, 500)
+      }
+    }
+
+    setTimeout(on_timeout, 500)
+
+  }, [ ])
 
   const draggable_accessor = useCallback((event: CalendarEvent) => ctx.is_editing, [ ctx.is_editing ])
 
