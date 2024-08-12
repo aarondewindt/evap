@@ -1,15 +1,34 @@
+import { Prisma } from '@prisma/client'
 import type { ReactNode } from 'react'
+
+
+export const event_task_get_payload: {
+  where?: Prisma.EventTaskWhereInput
+  include: {
+    location: true,
+    event: true,
+    volunteers: true,
+  }
+} = {
+  include: {
+    location: true,
+    event: true,
+    volunteers: true,
+  }
+}
+
 
 export type TaskViewProps = { 
   task_id: string
+  editable?: boolean
 }
 
 export type Memory = { 
-  foo: number 
+  edit: null | Prisma.EventTaskGetPayload<typeof event_task_get_payload>
 }
 
 export type Injected = { 
-  bar?: string
+  // event_task_query?: ReturnType<typeof useFindManyEventTasks>
 }
 
 export interface TaskViewProviderProps extends TaskViewProps {
@@ -22,4 +41,6 @@ export interface State {
   injected: Injected
 }
 
-export const init_memory: Memory = { foo: 0 }
+export const init_memory: Memory = { 
+  edit: null
+}

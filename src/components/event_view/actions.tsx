@@ -5,6 +5,7 @@ import { Draft } from "immer"
 import { useInject } from "./inject"
 import { modals } from "@mantine/modals"
 import { Text } from "@mantine/core"
+import { useRouter } from "next/navigation"
 
 
 export const useActions = (
@@ -13,6 +14,8 @@ export const useActions = (
       a: ReturnType<typeof useInject>['injected_actions'],
       set_state: (recipe: (draft: Draft<State>)=>void)=>void) => {
   
+  const router = useRouter()
+
   const ref = useRef({ state, s, a, set_state })
   useEffect(() => {
     ref.current = { state, s, a, set_state }
@@ -94,7 +97,16 @@ export const useActions = (
     })
   }, [ set_state ])
   
+  const is_editing = s.sel_is_editing(state)
+
   const on_calendar_delete = useCallback(<T extends keyof CEvents,>(calendar: T, cevent: CEvents[T]) => {
+    if (!is_editing) {
+      if (calendar === "tasks" && ("id" in cevent.resource)) {
+        router.push(`/tasks/${cevent.resource.id}`)
+      }
+      return
+    }
+
     modals.openConfirmModal({
       title: `Delete ${calendar}?`,
       children: <Text>Are you sure you want to delete &apos;{cevent.title}&apos;?</Text>,
@@ -114,7 +126,7 @@ export const useActions = (
         })
       }
     })    
-  }, [ set_state ])
+  }, [ set_state, is_editing ])
 
   const on_calendar_event_edit = useCallback(<T extends keyof CEvents,>(
           calendar: T,

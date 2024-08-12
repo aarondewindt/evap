@@ -35,6 +35,13 @@ export const navmap: NavMap = [
     active_pathname_pattern: /^\/volunteers/
   },
   {
+    label: "Availability",
+    href: "/availability",
+    left_section: <IconUsersGroup size="1rem" stroke={1.5}/>,
+    active_pathname_pattern: /^\/availability/,
+    must_be_authenticated: true
+  },
+  {
     label: "Locations",
     href: "/locations",
     left_section: <IconMapPin size="1rem" stroke={1.5}/>,

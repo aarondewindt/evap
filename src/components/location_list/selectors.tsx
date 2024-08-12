@@ -42,7 +42,7 @@ export const useSelectors = ()=> {
         return _.find(locations, (location) => location.id === selected_location_id) ?? null
       }
     )
-
+ 
     return {
       sel_is_fetching,
       sel_locations,

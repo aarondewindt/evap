@@ -13,7 +13,7 @@ export const useActions = (
   
   const on_something = useCallback(() => {
     set_state((draft) => {
-      // draft.memory.foo = 1
+      draft.memory.foo = 1
     })
   }, [set_state])
 
